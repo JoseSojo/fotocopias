@@ -25,9 +25,7 @@ model User {
   password     String
   last_session DateTime?
 
-  createBy          String? @unique
-  createByReference User?  @relation("BlogOwnerHistory", fields: [createBy], references: [userId])
-  predecessor       User?  @relation("BlogOwnerHistory")
+  createBy          String?
 
   paymentMethod     PaymentMethod[]
   meney             Money[]
@@ -63,7 +61,7 @@ model PaymentMethod {
   title           String
   description     String?
 
-  moneyId        String @unique
+  moneyId        String
   moneyReference Money  @relation(fields: [moneyId], references: [moneyId])
 
   createBy String // reference this table

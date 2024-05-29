@@ -8,6 +8,9 @@ import session from 'express-session';
 import exphbs from 'express-handlebars';
 import helpersHandlebars from './config/helpers/helpersHandlebars';
 import './config/passport';
+import UserController from './controller.ts/user/UserController';
+import AuthController from './controller.ts/auth/AuthController';
+import { OffSession, OnSession } from './middlewares/auth';
 
 // start
 class App {
@@ -17,7 +20,7 @@ class App {
         this.app = express();
     }
 
-    Start () {
+    public Start () {
         this.app.use(morgan('dev'));
         this.app.use(express.json());
         this.app.use(express.urlencoded({extended:false}));
@@ -54,24 +57,39 @@ class App {
         });
 
         this.app.get(`/`, (req: Request, res: Response) => {
-            return res.render(`app`);
+            if(req.user) return res.redirect(`/dashboard`);
+            return res.redirect(`/login`);
         });
 
-        // static tiles
-        console.log(path.join(process.cwd(), 'public'));
-        
+        // routes
+        this.LoadRoutes();
+
+        // static tiles        
         this.app.use(express.static(path.join(process.cwd(), 'public')))
     }
 
-    Run () {
+    public async LoadRoutes() {
+        // routes users
+        const user = new UserController();
+        this.app.get(`/dashboard`, OnSession ,user.DashboardController);
+
+        // start user
+        this.app.get(`/init/app`, user.InsertUserBase);
+
+        // routes auth
+        const auth = new AuthController();
+        this.app.get(`/login`, OffSession, auth.LoginRender);
+        this.app.post(`/login`, OffSession, auth.LoginController);
+    }
+
+    public Run () {
         this.Start();
 
         const PORT = process.env.post ? process.env.post : 8080;
         this.app.listen(
             PORT,
             () => {
-                console.log(`SERVER RUN -> port ${PORT}`);
-                console.log(`VISITE http:localhost:${PORT}`);
+                console.log(`SERVER RUN [${PORT}]`);
             }
         )
     }
