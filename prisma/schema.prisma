@@ -1,0 +1,162 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model App {
+  appId       String @id @default(uuid())
+  mount_total Float
+  app_name    String @default("Fotocopia")
+}
+
+model User {
+  userId       String    @id @default(uuid())
+  name         String
+  lastname     String
+  username     String    @unique
+  email        String    @unique
+  password     String
+  last_session DateTime?
+
+  createBy          String? @unique
+  createByReference User?  @relation("BlogOwnerHistory", fields: [createBy], references: [userId])
+  predecessor       User?  @relation("BlogOwnerHistory")
+
+  paymentMethod     PaymentMethod[]
+  meney             Money[]
+  products          Product[]
+  stock             Stock[]
+  transaction       Transaction[]
+  serviceType       ServiceType[]
+  service           Service[]
+
+  create_at DateTime  @default(now())
+  update_at DateTime  @default(now()) @updatedAt
+  delete_at DateTime?
+}
+
+model Money {
+  moneyId     String  @id @default(uuid())
+  title       String
+  prefix      String
+  description String?
+
+  paymentMethod PaymentMethod[]
+
+  createBy String
+  createReference User  @relation(fields: [createBy], references: [userId])
+
+  create_at DateTime  @default(now())
+  update_at DateTime  @default(now()) @updatedAt
+  delete_at DateTime?
+}
+
+model PaymentMethod {
+  paymentMethodId String  @id @default(uuid())
+  title           String
+  description     String?
+
+  moneyId        String @unique
+  moneyReference Money  @relation(fields: [moneyId], references: [moneyId])
+
+  createBy String // reference this table
+  createReference User  @relation(fields: [createBy], references: [userId])
+
+  transaction     Transaction[]
+
+  create_at DateTime  @default(now())
+  update_at DateTime  @default(now()) @updatedAt
+  delete_at DateTime?
+}
+
+model Product {
+  productId       String  @id @default(uuid())
+  name            String
+  description     String?
+
+  createBy String
+  createReference User  @relation(fields: [createBy], references: [userId])
+
+  serviceType     ServiceType[]
+  stock           Stock[]
+
+  create_at       DateTime  @default(now())
+  delete_at       DateTime?
+}
+
+model Stock {
+  stockId               String      @id @default(uuid())
+  name                  String
+  description           String?
+
+  productId             String
+  productReference      Product     @relation(fields: [productId], references: [productId])
+  quantityProduct       Int
+
+  updateBy              String
+  updateReference       User        @relation(fields: [updateBy], references: [userId])
+
+  transaction           Transaction @relation(fields: [transactionId], references: [transactionId])
+  transactionId         String      @unique // relation scalar field (used in the `@relation` attribute above)
+
+
+  create_at             DateTime    @default(now())
+  update_at             DateTime    @default(now()) @updatedAt
+  delete_at             DateTime?
+}
+
+model Transaction {
+  transactionId           String      @id @default(uuid())
+  concepto                String
+  mount                   Float
+
+  service                 Service?
+
+  stock                   Stock?
+  methodPaymentId         String
+  methodPaymentReference  PaymentMethod @relation(fields: [methodPaymentId], references: [paymentMethodId])
+
+  createBy String
+  createReference         User  @relation(fields: [createBy], references: [userId])
+
+  create_at               DateTime  @default(now())
+  delete_at               DateTime?
+}
+
+model ServiceType {
+  serviceTypeId     String  @id @default(uuid())
+  name              String
+  description       String
+
+  productExpenseId    String
+  productExpenseReference Product @relation(fields: [productExpenseId], references: [productId])
+
+  createBy String
+  createReference User  @relation(fields: [createBy], references: [userId])
+
+  create_at       DateTime  @default(now())
+  delete_at       DateTime?
+}
+
+model Service {
+  serviceId             String      @id @default(uuid())
+  description           String?
+  date                  DateTime
+
+  createBy              String
+  createReference       User        @relation(fields: [createBy], references: [userId])
+
+  transaction           Transaction @relation(fields: [transactionId], references: [transactionId])
+  transactionId         String      @unique // relation scalar field (used in the `@relation` attribute above)
+
+  create_at             DateTime    @default(now())
+  update_at             DateTime    @default(now()) @updatedAt
+  delete_at             DateTime?
+}
