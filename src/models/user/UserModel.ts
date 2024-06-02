@@ -7,6 +7,21 @@ class UserModel extends AbstractModel {
         super();
     }
 
+    // get users pagination
+    public async GetUsers({pag, limit=10}: {pag:number, limit:number}) {
+        const result = await this.prisma.user.findMany({
+            skip: pag*10,
+            take: limit
+        });
+        return result;
+    }
+
+    public async CountBy({ filter }: {filter:any}) {
+        const result = await this.prisma.user.count({ where:filter });
+        return result;
+    }
+
+    // crea usuario
     public async CreateUser({data}:{data:UserCreate}) {
         this.StartPrisma();
         const result = await this.prisma.user.create({data}); 
@@ -14,6 +29,7 @@ class UserModel extends AbstractModel {
         return result;
     }
 
+    // busca usuario por email
     public async FindUserByEmail({email}: {email:string}) {
         this.StartPrisma();
         const result = await this.prisma.user.findUnique({ where:{email} });
@@ -21,6 +37,7 @@ class UserModel extends AbstractModel {
         return result;
     }
 
+    // busca usuario por usuario
     public async FindUserByUsername({username}: {username:string}) {
         this.StartPrisma();
         const result = await this.prisma.user.findUnique({ where:{username} });
@@ -28,6 +45,7 @@ class UserModel extends AbstractModel {
         return result;
     }
 
+    // busca usuario por id
     public async FindUserById({id}: {id:string}) {
         this.StartPrisma();
         const result = await this.prisma.user.findFirst({ where:{userId:id} });
@@ -35,33 +53,38 @@ class UserModel extends AbstractModel {
         return result;
     }
 
+    // actualiza usuario por id
     public async UpdateUser() {
         this.StartPrisma();
         
         this.DistroyPrisma();
     }
 
+    // agrega eliminación de uaurio
     public async AtDeleteUser() {
         this.StartPrisma();
 
         this.DistroyPrisma();
     }
 
+    // elimina usuario
     public async DeleteUser() {
         this.StartPrisma();
 
         this.DistroyPrisma();
     }
 
+    // compara contrasenias
     public async ComparePassword({password, dbPassword}:{password:string, dbPassword:string}) {
         const result = await this.bcrypt.compare(password, dbPassword);
         return result;
     }
 
+    // encripta contrasenia
     public async HashPassword({password}:{password:string}) {
         const result = await this.bcrypt.hash(password, 15);
         return result;
     }
 }
 
-export default UserModel;
+export default new UserModel();

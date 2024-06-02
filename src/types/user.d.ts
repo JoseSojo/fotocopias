@@ -8,14 +8,11 @@ export interface UserCreate extends UserLogin {
   name: string,
   lastname: string,
   username: string,
-  createBy?: string
+  createBy: string | null
 }
 
 export interface UserCompleted extends UserCreate {
   userId: string,
-  createBy: string,
-  createByReference: UserCompleted | null,
-  predecessor: string,
 
   // paymentMethod     PaymentMethod[]
   // meney             Money[]

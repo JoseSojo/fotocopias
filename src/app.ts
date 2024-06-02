@@ -8,9 +8,11 @@ import session from 'express-session';
 import exphbs from 'express-handlebars';
 import helpersHandlebars from './config/helpers/helpersHandlebars';
 import './config/passport';
-import UserController from './controller.ts/user/UserController';
-import AuthController from './controller.ts/auth/AuthController';
+import UserController from './controller/user/UserController';
+import AuthController from './controller/auth/AuthController';
+import GlobalTest from './test/TestModels';
 import { OffSession, OnSession } from './middlewares/auth';
+import ConfigController from './controller/config/MoneyController';
 
 // start
 class App {
@@ -69,12 +71,45 @@ class App {
     }
 
     public async LoadRoutes() {
+        // test
+        const test = new GlobalTest();
+
         // routes users
         const user = new UserController();
-        this.app.get(`/dashboard`, OnSession ,user.DashboardController);
+        this.app.get(`/dashboard`, OnSession , user.DashboardController);
+
+        // users
+        this.app.get(`/users`, OnSession , user.RenderDashboard);
+        this.app.get(`/users/list`, OnSession , user.RenderList);
+        this.app.get(`/user/create`, OnSession , user.RenderCreate);
+        this.app.get(`/user/:id/show`, OnSession , user.RenderShow); // show and update
+
+        this.app.post(`/user/create`, OnSession, user.CreateUserPost);
+
+        // config
+        const config = new ConfigController();
+
+        this.app.get(`/config`, OnSession, config.RenderDashboard);
+        // money 
+        this.app.get(`/config/moneys`, OnSession, config.RenderMoneyList);
+        this.app.get(`/config/money/create`, OnSession, config.RenderMoneyCreate);
+        this.app.get(`/config/money/:id/show`, OnSession, config.RenderMoneyShow);
+
+        this.app.post(`/config/money/create`, OnSession, config.CreateMoneyPost);
+        this.app.post(`/config/money/:id/update`, OnSession, config.UpdateMoneyPost);
+
+        // methods
+        this.app.get(`/config/methods`, OnSession, config.RenderMethodList);
+        this.app.get(`/config/method/create`, OnSession, config.RenderMethodCreate);
+        this.app.get(`/config/method/:id/show`, OnSession, config.RenderMethodShow);
+
+        this.app.post(`/config/method/create`, OnSession, config.CreateMethodPost);
+        // this.app.post(`/config/method/:id/udpate`, OnSession, config.UpdateMethodPost);
+        console.log(123);
+        this.app.post(`/config/method/:id/update`, OnSession, config.UpdateMethodPost)
 
         // start user
-        this.app.get(`/init/app`, user.InsertUserBase);
+        this.app.get(`/init/app/user`, user.InsertUserBase);
 
         // routes auth
         const auth = new AuthController();
@@ -85,7 +120,7 @@ class App {
     public Run () {
         this.Start();
 
-        const PORT = process.env.post ? process.env.post : 8080;
+        const PORT = process.env.post ? process.env.post : 9321;
         this.app.listen(
             PORT,
             () => {

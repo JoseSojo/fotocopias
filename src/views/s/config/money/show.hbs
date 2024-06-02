@@ -1,0 +1,62 @@
+<link href="/assets/css/users/user-profile.css" rel="stylesheet" type="text/css" />
+
+<div class="container">
+    <div class="row">
+        <div class="card col-xl-4 col-lg-6 col-md-5 col-sm-12 layout-top-spacing">
+            <div class="card-body">
+                <h4>{{data.title}}</h4>
+                <h6 class="text-muted">{{data.prefix}}</h6>
+                <p class="text-muted">{{data.description}}</p>
+
+                <p>
+                    <span class="">Creado el:</span><br>
+                    <b>
+                        {{#formatDate data.create_at}}
+                            {{this}}
+                        {{/formatDate}}
+                    </b>
+                </p>
+                <p>
+                    <span class="">Última actualización el:</span><br>
+                    <b>
+                        {{#formatDate data.update_at}}
+                            {{this}}
+                        {{/formatDate}}
+                    </b>
+                </p>
+                <p>
+                    <span class="">Creado por:</span><br>
+                    <b>
+                        {{data.createReference.username}}
+                    </b>
+                </p>
+            </div>
+        </div>
+
+        <div class="col-xl-8 col-lg-6 col-md-5 col-sm-12 layout-top-spacing">
+            <div class="card">
+                <form method="post" action="/config/money/{{data.moneyId}}/update" class="card-body form-row col-12">
+
+                    <div class="form-group col-12 col-lg-6">
+                        <label for="t-name" class="">Nombre:</label>
+                        <input id="t-name" type="text" value="{{data.title}}" name="title" class="form-control" required>
+                    </div>
+
+                    <div class="form-group col-12 col-lg-6">
+                        <label for="t-prefix" class="">Prefijo:</label>
+                        <input id="t-prefix" type="text" value="{{data.prefix}}" name="prefix" class="form-control" required>
+                    </div>  
+
+                    <div class="form-group col-12">
+                        <label for="t-description" class="">Description:</label>
+                        <input id="t-description" type="text" value="{{data.description}}" name="description" class="form-control" required>
+                    </div>  
+
+                    <div class="col-12">
+                        <input type="submit" class="btn btn-primary" value="Crear" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

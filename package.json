@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node .",
     "build": "tsc",
-    "dev": "nodemon src/app.ts"
+    "dev": "nodemon ./src/app.ts",
+    "test": "ts-node ./src/test/TestModels.ts"
   },
   "keywords": [],
   "author": "",

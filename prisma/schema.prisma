@@ -91,8 +91,6 @@ model Product {
 
 model Stock {
   stockId               String      @id @default(uuid())
-  name                  String
-  description           String?
 
   productId             String
   productReference      Product     @relation(fields: [productId], references: [productId])
@@ -103,7 +101,6 @@ model Stock {
 
   transaction           Transaction @relation(fields: [transactionId], references: [transactionId])
   transactionId         String      @unique // relation scalar field (used in the `@relation` attribute above)
-
 
   create_at             DateTime    @default(now())
   update_at             DateTime    @default(now()) @updatedAt
@@ -133,8 +130,9 @@ model ServiceType {
   name              String
   description       String
 
-  productExpenseId    String
-  productExpenseReference Product @relation(fields: [productExpenseId], references: [productId])
+  tonel             Boolean     @default(false)
+  productExpenseId          String
+  productExpenseReference   Product @relation(fields: [productExpenseId], references: [productId])
 
   createBy String
   createReference User  @relation(fields: [createBy], references: [userId])
@@ -147,6 +145,8 @@ model Service {
   serviceId             String      @id @default(uuid())
   description           String?
   date                  DateTime
+
+  listServicesReferences  String
 
   createBy              String
   createReference       User        @relation(fields: [createBy], references: [userId])

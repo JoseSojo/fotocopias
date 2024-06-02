@@ -1,0 +1,50 @@
+<link href="/assets/css/users/user-profile.css" rel="stylesheet" type="text/css" />
+
+<div class="container">
+    <div class="row">
+        <div class="card col-xl-4 col-lg-6 col-md-5 col-sm-12 layout-top-spacing">
+            <div class="card-body">
+                <h4>{{data.title}}</h4>
+                <h6 class="text-muted">moneda: {{data.moneyReference.title}}</h6>
+
+                <p class="text-muted">{{data.description}}</p>
+
+                <div class="row mt-3">
+                    <p class="col-12">Creado por: <b>{{data.createReference.username}}</b></p>
+                    <p class="col-12">Creado el: <b>{{#formatDate data.create_at}} {{this}} {{/formatDate}}</b></p>
+                    <p class="col-12">Última actualización: <b>{{#formatDate data.update_at}} {{this}} {{/formatDate}}</b></p>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-xl-8 col-lg-6 col-md-5 col-sm-12 layout-top-spacing">
+            <div class="card">
+                <form method="post" action="/config/method/{{data.paymentMethodId}}/update" class="card-body form-row col-12 col-lg-6 m-auto">
+
+                    <div class="form-group col-12">
+                        <label for="t-title" class="">Titulo:</label>
+                        <input id="t-title" type="text" value="{{data.title}}" name="title" class="form-control" required>
+                    </div>  
+
+                    <div class="form-group col-12">
+                        <label for="t-description" class="">Descripción:</label>
+                        <input id="t-description" type="text" value="{{data.description}}" name="description" class="form-control" required>
+                    </div>  
+
+                    <div class="form-group col-12">
+                        <label for="t-money" class="">Moneda:</label>
+                        <input id="t-money" type="text" class="form-control" value="{{data.moneyReference.title}}" disabled />
+                        <p class="text-muted text-sm">no puedes actualizar la moneda</p>
+                    </div> 
+                    
+
+                    <div class="col-12 mt-1">
+                        <input type="hidden" value="{{data.moneyId}}" name="money" />
+                        <input type="submit" class="btn btn-primary" value="actualizar" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

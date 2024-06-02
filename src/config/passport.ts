@@ -6,16 +6,14 @@ passport.use("local.login", new Strategy({
   usernameField: "email",
   passwordField: "password"
 }, async (email: string, password: string, done: any) => {
-    const model = new UserModel(); 
+    const model = UserModel; 
     const user = await model.FindUserByEmail({email});
 
     if (user) {
         const dbPassword: string = user.password;
         const match = await model.ComparePassword({password, dbPassword});
-        console.log(match);
 
         if (match) {
-          console.log(match);
           return done(null, user);
         }
 
@@ -29,9 +27,8 @@ passport.serializeUser((user: any, done: any) => {
 });
 
 passport.deserializeUser(async (id: string, done: any) => {
-  const model = new UserModel(); 
+  const model = UserModel; 
   const user = await model.FindUserById({id});
   if(!user) return done(true, null);
-  console.log(user);
   return done(null, user); // exito
 });
