@@ -13,6 +13,10 @@ import AuthController from './controller/auth/AuthController';
 import GlobalTest from './test/TestModels';
 import { OffSession, OnSession } from './middlewares/auth';
 import ConfigController from './controller/config/MoneyController';
+import StockController from './controller/stock/ProductController';
+import EquipmentController from './controller/stock/EquipmentController';
+import ServiceTypeController from './controller/service/ServiceType';
+import ServiceController from './controller/service/Service';
 
 // start
 class App {
@@ -89,6 +93,9 @@ class App {
         // config
         const config = new ConfigController();
 
+        // stock
+        const stock = new StockController();
+
         this.app.get(`/config`, OnSession, config.RenderDashboard);
         // money 
         this.app.get(`/config/moneys`, OnSession, config.RenderMoneyList);
@@ -105,8 +112,43 @@ class App {
 
         this.app.post(`/config/method/create`, OnSession, config.CreateMethodPost);
         // this.app.post(`/config/method/:id/udpate`, OnSession, config.UpdateMethodPost);
-        console.log(123);
         this.app.post(`/config/method/:id/update`, OnSession, config.UpdateMethodPost)
+
+        // stock
+        this.app.get(`/stock`, OnSession, stock.RenderDashboard);
+        this.app.get(`/stock/create`, OnSession, stock.RenderCreateStock);
+        this.app.get(`/stock/list`, OnSession, stock.RenderListStock);
+        this.app.get(`/stock/:id/show`, OnSession, stock.RenderShowStock);
+
+        // logic
+        this.app.post(`/stock/create`, OnSession, stock.CreateStockPost);
+        this.app.post(`/stock/:id/update`, OnSession, stock.UpdateStockPost);
+
+        // equipment
+        const equiment = new EquipmentController();
+        this.app.get(`/stock/equipment`, OnSession, equiment.RenderListEquipment);
+        this.app.get(`/stock/equipment/create`, OnSession, equiment.RenderCreateEquipment);
+        this.app.get(`/stock/equipment/:id/show`, OnSession, equiment.RenderShowEquipment);
+
+        // logic equiment
+        this.app.post(`/stock/equipment/create`, OnSession, equiment.CreateEquipment);
+        this.app.post(`/stock/equipment/:id/update`, OnSession, equiment.UpdateEquipment);
+
+        //  service types
+        const types = new ServiceTypeController();
+        this.app.get(`/service/types`, OnSession, types.RenderList);
+        this.app.get(`/service/types/create`, OnSession, types.RenderCreate);
+        this.app.get(`/service/types/:id/show`, OnSession, types.RenderShow);
+
+        this.app.post(`/service/types/create`, OnSession, types.CreateTypePost)
+
+        const service = new ServiceController();
+        this.app.get(`/service/`, OnSession, service.RenderDashboard);
+        this.app.get(`/service/list`, OnSession, service.RenderList);
+        this.app.get(`/service/create`, OnSession, service.RenderCreate);
+        this.app.get(`/service/:id/show`, OnSession, service.RenderShow);
+        this.app.post(`/service/create`, OnSession, service.CreateServicePost);
+
 
         // start user
         this.app.get(`/init/app/user`, user.InsertUserBase);

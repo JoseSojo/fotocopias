@@ -1,5 +1,5 @@
+import { ServiceCreate, TypeCreate } from "../../types/services";
 import { UserCompleted } from "../../types/user.d";
-import { ServiceTypeCreate, ServiceCreate, ServiceCompleted, ServiceTypeCompleted } from "../../types/services";
 import AbstractModel from "../BaseModel";
 
 class ServiceModel extends AbstractModel {
@@ -8,116 +8,113 @@ class ServiceModel extends AbstractModel {
         super();
     }
 
-    // crear tipo
-    public async CreateServiceType({data}:{data:ServiceTypeCreate}) {
+    public async CreateType({data}:{data:TypeCreate}) {
         this.StartPrisma();
         const result = await this.prisma.serviceType.create({data});
         this.DistroyPrisma();
         return result;
-    }   
-    
-    // actualiza ServiceType
-    public async UpdateServiceType({id,data}:{id:string,data:ServiceTypeCreate}) {
-        this.StartPrisma();
-        const result = await this.prisma.serviceType.update({data, where:{serviceTypeId:id}});
-        this.DistroyPrisma();
-        return result;
-    }    
+    }
 
-    // elimina ServiceType
-    public async DeleteServiceType({id}:{id:string}) {
+    public async GetAllTypes({pag,limit=10}: {pag:number, limit:number}) {
         this.StartPrisma();
-        await this.prisma.serviceType.update({data:{delete_at:Date.now().toString()}, where:{serviceTypeId:id}});
-        this.DistroyPrisma();
-        return true; // boolean
-    }   
-
-    // obtiene todos los ServiceType de 10 en 10
-    public async GetAllServiceType({pag, limit=10}:{pag:number, limit:number}) {
-        this.StartPrisma();
-        const result = await this.prisma.serviceType.findMany({ 
-            where:{delete_at:null}, 
-            skip:pag*limit, 
-            take:limit,
-            include:{
-                createReference:true,
-                productExpenseReference: true
-            }, 
+        const result = await this.prisma.serviceType.findMany({
+            include: {
+                createReference: true,
+                stockExpenseReference: {
+                    include: { serviceType:{
+                        include: {
+                            stockExpenseReference: true
+                        }
+                    } }
+                },
+            },
+            skip: pag*limit,
+            take: limit
         });
+        console.log(result[0]);
         this.DistroyPrisma();
         return result;
     }
 
-    // obtiene un ServiceType por id
-    public async GetServiceTypeById({id}:{id:string}) {
+    public async GetTypeById({id}:{id:string}) {
         this.StartPrisma();
-        const result = await this.prisma.serviceType.findFirst({ 
-            where:{serviceTypeId:id}, 
-            include:{
-                createReference:true,
-                productExpenseReference: true
-            }, 
-        });
-        if(result == null) return null;
-        
+        const result = await this.prisma.serviceType.findFirst({ where:{serviceTypeId:id}, include:{createReference:true,stockExpenseReference: true} });
         this.DistroyPrisma();
         return result;
     }
 
-    // crea Service
+    public async UpdateType({id,data}:{id:string,data:TypeCreate}) {
+        this.StartPrisma();
+        const result = await this.prisma.serviceType.update({where:{serviceTypeId:id}, data }); 
+        this.DistroyPrisma();
+        return result;
+    }
+
+    public async CountTypesBy({filter}: {filter:any}) {
+        this.StartPrisma();
+        const result = await this.prisma.serviceType.count({ where:filter });
+        this.DistroyPrisma();
+        return result;
+    }
+
+    public async CountService({filter}: {filter:any}) {
+        this.StartPrisma();
+        const result = await this.prisma.service.count({ where:filter });
+        this.DistroyPrisma();
+        return result;
+    }
+
     public async CreateService({data}: {data:ServiceCreate}) {
         this.StartPrisma();
-        const result = await this.prisma.service.create({data});
+        const result = await this.prisma.service.create({ data });
         this.DistroyPrisma();
-        return result; // Service completo
+        return result;
     }
 
-    // actualiza Service
-    public async UpdateService({data,id}: {data:ServiceCreate,id:string}) {
+    public async GetAllService({pag,limit=0}: {pag:number,limit:number}) {
         this.StartPrisma();
-        const result = await this.prisma.service.update({data, where:{serviceId:id}});
-        this.DistroyPrisma();
-        return result; // MethodPayment completo
-    }
-
-    // delete Services
-    public async DeleteServices({id}: {id:string}) {
-        this.StartPrisma();
-        const result = await this.prisma.service.update({data:{delete_at:Date.now().toString()}, where:{serviceId:id}});
-        this.DistroyPrisma();
-        return result; // Services completo
-    }
-
-    // obtiene todos los Services de 10 en 10
-    public async GetAllServices({pag, limit=10}:{pag:number, limit:number}) {
-        this.StartPrisma();
-        const result = await this.prisma.service.findMany({ 
-            where:{delete_at:null}, 
-            skip:pag*limit, 
-            take:limit,
-            include:{
+        const result = await this.prisma.service.findMany({
+            include: {
                 createReference: true,
+                equipmentReference: true,
                 transaction: true
-            }
+            },
+            skip:pag*limit,
+            take:limit
         });
         this.DistroyPrisma();
         return result;
     }
 
-    // obtiene un Services por id
-    public async GetServicesById({id}:{id:string}) {
+    public async GetServiceById({id}:{id:string}) {
         this.StartPrisma();
         const result = await this.prisma.service.findFirst({ 
-            where:{serviceId:id}, 
-            include:{
-                createReference: true,
-                transaction: true
-            }, 
+            where:{ serviceId:id},
+            include:{ 
+                createReference:true,
+                equipmentReference:true,
+                transaction: {
+                    include: {
+                        methodPaymentReference:{
+                            include: {
+                                moneyReference: true
+                            }
+                        },
+                        createReference: true,
+                    }         
+                },
+                typeReferences: {
+                    include: {
+                        stockExpenseReference: true
+                    }
+                }
+            } 
         });
-        if(result == null) return null;
+        console.log(result);
+        console.log(result?.transaction);
         this.DistroyPrisma();
         return result;
     }
 }
 
-export default ServiceModel;
+export default new ServiceModel();

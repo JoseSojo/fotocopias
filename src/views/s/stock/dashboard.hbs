@@ -1,0 +1,26 @@
+<link href="/assets/css/dashboard/dash_1.css" rel="stylesheet" type="text/css" />
+
+<div class="container">
+    <div class="row" style="gap:.75em">
+        <div class="col-md-4 col-sm-12 col-6 card">
+            <div class="card-body row">
+                <div class="m-auto col-4">
+                    <i class="bi bi-archive" style="font-size: 30px ;border-radius: 50%;"></i>
+                </div>
+                <div class="m-auto col-8 d-grid">
+                    <a href="/stock/list" class="btn btn-primary"><b>Inventario ({{countStock}})</b></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-12 col-6 card">
+            <div class="card-body row">
+                <div class="m-auto col-5">
+                    <i class="bi bi-boxes" style="font-size: 30px;"></i>
+                </div>
+                <div class="m-auto col-7">
+                    <a href="/stock/product/create" class="btn btn-primary"><b>Equipos ({{countEquipment}})</b></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

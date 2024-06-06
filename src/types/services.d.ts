@@ -1,43 +1,41 @@
-import { ProductCompleted } from "./stock.d"
+import { User } from "@prisma/client"
+import { StockCompleted } from "./stock"
 import { TransactionCompleted } from "./transaction.d"
 import { UserCompleted } from "./user.d"
+import { EquimentData } from "./equipment"
 
-export interface ServiceTypeCreate {
+export interface TypeCreate {
     name: string,
     description: string,
-    tonel: boolean,
-
-    productExpenseId: string,
     createBy: string,
+    stockExpenseId: string
 }
 
-export interface ServiceTypeCompleted extends ServiceTypeCreate {
-    serviceTypeId: string,
-
-    productExpenseReference: ProductCompleted,
-    createReference: UserCompleted,
+export interface TypeCompleted {
+    createference: UserCompleted,
+    stockExpenseReference: StockCompleted,
 
     create_at: string,
-    delete_at: string
+    update_at: string,
+    delete_at: string | null
 }
 
 export interface ServiceCreate {
     description: string,
     date: string,
+    typeId: string,
     createBy: string,
     transactionId: string,
-
-    listServicesReferences: string,
+    equipmentId: string,
 }
 
-export interface ServiceCompleted extends ServiceCreate {
+export interface ServiceCompleted {
     serviceId: string,
-
     createReference: UserCompleted,
     transaction: TransactionCompleted,
+    equipmentReference: EquimentData,
 
     create_at: string,
     update_at: string,
-    delete_at: string
-
+    delete_at: string | null,
 }

@@ -29,11 +29,11 @@ model User {
 
   paymentMethod     PaymentMethod[]
   meney             Money[]
-  products          Product[]
   stock             Stock[]
   transaction       Transaction[]
   serviceType       ServiceType[]
   service           Service[]
+  equiment          Equipment[]
 
   create_at DateTime  @default(now())
   update_at DateTime  @default(now()) @updatedAt
@@ -46,6 +46,7 @@ model Money {
   prefix      String
   description String?
 
+  stock         Stock[]
   paymentMethod PaymentMethod[]
 
   createBy String
@@ -74,30 +75,20 @@ model PaymentMethod {
   delete_at DateTime?
 }
 
-model Product {
-  productId       String  @id @default(uuid())
-  name            String
-  description     String?
-
-  createBy String
-  createReference User  @relation(fields: [createBy], references: [userId])
-
-  serviceType     ServiceType[]
-  stock           Stock[]
-
-  create_at       DateTime  @default(now())
-  delete_at       DateTime?
-}
-
 model Stock {
   stockId               String      @id @default(uuid())
+  name                  String
+  description           String?
+  quantity              Int
 
-  productId             String
-  productReference      Product     @relation(fields: [productId], references: [productId])
-  quantityProduct       Int
+  moneyId               String
+  moneyReference        Money       @relation(fields: [moneyId], references: [moneyId])
+
 
   updateBy              String
   updateReference       User        @relation(fields: [updateBy], references: [userId])
+
+  serviceType           ServiceType[]
 
   transaction           Transaction @relation(fields: [transactionId], references: [transactionId])
   transactionId         String      @unique // relation scalar field (used in the `@relation` attribute above)
@@ -130,9 +121,10 @@ model ServiceType {
   name              String
   description       String
 
-  tonel             Boolean     @default(false)
-  productExpenseId          String
-  productExpenseReference   Product @relation(fields: [productExpenseId], references: [productId])
+  stockExpenseId          String
+  stockExpenseReference   Stock @relation(fields: [stockExpenseId], references: [stockId])
+
+  services        Service[]
 
   createBy String
   createReference User  @relation(fields: [createBy], references: [userId])
@@ -144,9 +136,10 @@ model ServiceType {
 model Service {
   serviceId             String      @id @default(uuid())
   description           String?
-  date                  DateTime
-
-  listServicesReferences  String
+  date                  String
+  
+  typeId                String
+  typeReferences        ServiceType   @relation(fields: [typeId], references: [serviceTypeId])
 
   createBy              String
   createReference       User        @relation(fields: [createBy], references: [userId])
@@ -154,7 +147,26 @@ model Service {
   transaction           Transaction @relation(fields: [transactionId], references: [transactionId])
   transactionId         String      @unique // relation scalar field (used in the `@relation` attribute above)
 
+  equipmentId           String
+  equipmentReference    Equipment   @relation(fields: [equipmentId], references: [equipmentId])
+
   create_at             DateTime    @default(now())
   update_at             DateTime    @default(now()) @updatedAt
   delete_at             DateTime?
+}
+
+model Equipment {
+  equipmentId             String      @id @default(uuid())
+  name                    String
+  description             String
+
+  createBy              String
+  createReference       User        @relation(fields: [createBy], references: [userId])
+
+
+  servicesId              Service[]
+
+  create_at               DateTime    @default(now())
+  update_at               DateTime    @default(now()) @updatedAt
+  delete_at               DateTime?
 }

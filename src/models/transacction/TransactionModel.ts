@@ -65,4 +65,4 @@ class TransactionModel extends AbstractModel {
     }
 }
 
-export default TransactionModel;
+export default new TransactionModel;

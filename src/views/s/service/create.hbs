@@ -1,0 +1,89 @@
+/
+<div class="container">
+    <div class="row d-flex justify-content-between mb-2">
+        <span></span>
+        <div class="">
+            <a href="/service" class="btn btn-primary">panel</a>
+            <a href="/service/list" class="btn btn-primary">lista</a>
+        </div>
+    </div>
+
+    <form method="post" action="/service/create" class="form-row col-12">
+
+        <div class="form-group col-6">
+            <label for="t-prefix" class="">Descripción:</label>
+            <textarea id="t-prefix" name="description" class="form-control" required></textarea>
+        </div>  
+
+        <div class="form-group col-6">
+            <label for="t-date" class="">Fecha:</label>
+            <input id="t-date" type="date" name="date" class="form-control" required>
+        </div>
+
+        <div class="form-group col-6">
+            <label for="t-servicetype" class="">Tipo de servicio:</label>
+            <select id="t-servicetype" type="text" name="serviceType" class="form-control" required>
+                <option value="NULL">selecciona una opción</option>
+                {{#each types}}
+                    <option value="{{this.serviceTypeId}}---{{this.name}}">{{this.name}}</option>
+                {{/each}}
+            </select>
+            {{#each types}}
+                <input type="hidden" value="{{this.name}}---{{this.stockExpenseReference.name}}" class="productsExpenses" />
+            {{/each}}
+        </div>
+
+        <div class="form-group col-6">
+            <label for="t-quantity" class="" id="productGoHere">Cuanto gastó:</label>
+            <input id="t-quantity" type="datetime" name="quantity" class="form-control" required>
+        </div>
+
+        <div class="form-group col-6">
+            <label for="t-servicetype" class="">Equipo:</label>
+            <select id="t-servicetype" type="text" name="equipment" class="form-control" required>
+                <option value="NULL">selecciona una opción</option>
+                {{#each equipments}}
+                    <option value="{{this.equipmentId}}">{{this.name}}</option>
+                {{/each}}
+            </select>
+        </div>
+
+        <div class="form-group col-6">
+            <label for="t-mthod" class="">Método de pago:</label>
+            <select id="t-mthod" type="text" name="method" class="form-control" required>
+                <option value="NULL">selecciona una opción</option>
+                {{#each methods}}
+                    <option value="{{this.paymentMethodId}}">{{this.title}}</option>
+                {{/each}}
+            </select>
+        </div>
+
+        <div class="form-group col-6">
+            <div class="container-fluid">
+                <div class="row">
+                    <label for="t-mount" class="col-12">Precio total:</label>
+                    <input id="t-mount" type="text" name="mount" class="form-control col-8" required>
+
+                    <select id="t-mthod" type="text" name="moneyId" class="form-control col-4" required>
+                        <option value="NULL">selecciona una opción</option>
+                        {{#each moneys}}
+                            <option value="{{this.moneyId}}">{{this.title}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group col-6">
+            <label for="t-concepto" class="">Concepto de transacción:</label>
+            <textarea id="t-concepto" name="concepto" class="form-control" required></textarea>
+        </div>  
+
+        <div class="col-12">
+            <input type="submit" class="btn btn-primary" value="Crear" />
+        </div>
+    </form>
+</div> 
+
+<script src="/assets/main.js">
+</script>

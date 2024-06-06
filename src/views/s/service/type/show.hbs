@@ -1,0 +1,30 @@
+<link href="/assets/css/users/user-profile.css" rel="stylesheet" type="text/css" />
+
+<div class="container">
+    <div class="row">
+        <div class="card col-lg-6 col-md-5 col-sm-12 layout-top-spacing">
+            <div class="card-body">
+                <h4>{{data.name}}</h4>
+                <p class="text-muted">descripción: <b>{{data.description}}</b></p>
+
+                <div class="mt-4">
+                    <h5>Creado por:</h5>
+                    <p>
+                        <span>usuario</span> <b>{{data.createReference.username}}</b>
+                    </p>
+                    <p>
+                        <span>correo</span> <b>{{data.createReference.email}}</b>
+                    </p>
+                </div>
+
+                <div class="mt-4">
+                    <h5>Producto:</h5>
+                    <p>
+                        <span>nobmre</span> <b>{{data.stockExpenseReference.name}}</b>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

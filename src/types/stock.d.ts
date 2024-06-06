@@ -1,28 +1,17 @@
 import { TransactionCompleted } from "./transaction"
 import { UserCompleted } from "./user.d"
 
-export interface ProductCreate {
+export interface StockCreate {
+    quantity: number,
+    updateBy: string,
     name: string,
     description: string,
-    createBy: string
-}
-
-export interface ProductCompleted extends ProductCreate {
-    productId: string,
-    create_at: string,
-    delete_at: string | null
-}
-
-export interface StockCreate {
-    productId: string,
-    quantityProduct: number,
-    updateBy: string,
+    moneyId: string,
     transactionId: string,
 }
 
 export interface StockCompleted extends StockCreate {
     stockId: string,
-    productReference: ProductCompleted | null,
     updateReference: UserCompleted | null,
     
     transaction: TransactionCompleted,
