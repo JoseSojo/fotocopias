@@ -1,5 +1,6 @@
 import { UserCreate } from "../../types/user.d";
 import AbstractModel from "../BaseModel";
+import TransactionModel from "../transacction/TransactionModel";
 
 class UserModel extends AbstractModel {
 
@@ -26,6 +27,7 @@ class UserModel extends AbstractModel {
         this.StartPrisma();
         const result = await this.prisma.user.create({data}); 
         this.DistroyPrisma();
+        this.StaticticsUpdate({});
         return result;
     }
 
@@ -83,6 +85,28 @@ class UserModel extends AbstractModel {
     // encripta contrasenia
     public async HashPassword({password}:{password:string}) {
         const result = await this.bcrypt.hash(password, 15);
+        return result;
+    }
+
+    public async StaticticsTopUsers({limit}:{limit:number}) {
+        // const transaction = await TransactionModel.UsersActives({ limit:5 });
+        // return transaction;
+        this.StartPrisma();
+        const result = this.prisma.user.findMany({
+            include: {
+                _count: true,
+                equiment: true,
+                meney: true,
+                paymentMethod: true,
+                service: true,
+                serviceType: true,
+                stock: true,
+                transaction: true,
+            },
+            skip: 0,
+            take: limit
+        })
+        this.DistroyPrisma();
         return result;
     }
 }

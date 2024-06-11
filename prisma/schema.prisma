@@ -46,6 +46,8 @@ model Money {
   prefix      String
   description String?
 
+  saldo       Decimal     @default(0)
+
   stock         Stock[]
   paymentMethod PaymentMethod[]
 
@@ -102,6 +104,8 @@ model Transaction {
   transactionId           String      @id @default(uuid())
   concepto                String
   mount                   Float
+
+  type                    String      @default("")
 
   service                 Service?
 
@@ -163,10 +167,40 @@ model Equipment {
   createBy              String
   createReference       User        @relation(fields: [createBy], references: [userId])
 
-
   servicesId              Service[]
 
   create_at               DateTime    @default(now())
   update_at               DateTime    @default(now()) @updatedAt
   delete_at               DateTime?
+}
+
+model StaticticsForYear {
+  staticticsForYearId         String      @id @default(uuid())
+  year                        Int
+
+  month1                      String      @default("1_enero")
+  month2                      String      @default("2_febrero")
+  month3                      String      @default("3_marzo")
+  month4                      String      @default("4_abril")
+  month5                      String      @default("5_mayo")
+  month6                      String      @default("6_junio")
+  month7                      String      @default("7_julio")
+  month8                      String      @default("8_agosto")
+  month9                      String      @default("9_septiembre")
+  month10                     String      @default("10_octubre")
+  month11                     String      @default("11_noviembre")
+  month12                     String      @default("12_diciembre")
+
+  enero                       Int     @default(0)
+  febrero                     Int     @default(0)
+  marzo                       Int     @default(0)
+  abril                       Int     @default(0)
+  mayo                        Int     @default(0)
+  junio                       Int     @default(0)
+  julio                       Int     @default(0)
+  agosto                      Int     @default(0)
+  septiembre                  Int     @default(0)
+  octubre                     Int     @default(0)
+  noviembre                   Int     @default(0)
+  diciembre                   Int     @default(0)
 }

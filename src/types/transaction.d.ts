@@ -6,6 +6,7 @@ export interface TransactionCreate {
     mount: number,
     methodPaymentId: string,
     createBy: string,
+    type: `INGRESO` | `EGRESO`
 }
 
 export interface TransactionCompleted extends TransactionCreate {

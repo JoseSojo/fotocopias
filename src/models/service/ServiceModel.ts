@@ -31,7 +31,6 @@ class ServiceModel extends AbstractModel {
             skip: pag*limit,
             take: limit
         });
-        console.log(result[0]);
         this.DistroyPrisma();
         return result;
     }
@@ -110,11 +109,24 @@ class ServiceModel extends AbstractModel {
                 }
             } 
         });
-        console.log(result);
-        console.log(result?.transaction);
         this.DistroyPrisma();
         return result;
     }
+
+    // estadísticas.
+
+    public async StatisticsServicesType() {
+        this.StartPrisma();
+        const result = await this.prisma.service.groupBy({
+            by: "typeId",
+            _count: { _all:true }
+        });
+
+        this.DistroyPrisma();
+        this.StaticticsUpdate({});
+        return result;
+    }
+
 }
 
 export default new ServiceModel();

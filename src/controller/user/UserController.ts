@@ -1,14 +1,41 @@
 import { Request, Response } from "express";
 import BaseController from "../BaseController";
 import UserModel from "../../models/user/UserModel";
+import MethodModel from "../../models/method/MethodModel";
+import ServiceModel from "../../models/service/ServiceModel";
+import TransactionModel from "../../models/transacction/TransactionModel";
 import { UserCompleted, UserCreate } from "../../types/user";
 
 class UserController extends BaseController {
 
     public async DashboardController (req: Request, res: Response) {
+        const moneysPromise = MethodModel.GetAllMoney({ pag:0, limit:10 });
+        const serviceCountPromise = ServiceModel.CountService({ filter:{} });
+        const transactionsCountPromise = TransactionModel.CountAllTransactions({});
+        const years = MethodModel.GetYears({});
 
+        const transsactions = await transactionsCountPromise;
 
         return res.render(`s/dashboard.hbs`, {
+            years: await years,
+            moneys: await moneysPromise,
+            servicesCount: await serviceCountPromise,
+            transactionCount: transsactions.all,
+            egresoCount: transsactions.egreso,
+            ingresoCount: transsactions.ingreso,
+            ubication: `Resumen`,
+        });
+    }
+
+    public async StaticticsController (req: Request, res: Response) {
+        const moneysPromise = MethodModel.GetAllMoney({ pag:0, limit:10 });
+        const serviceCountPromise = ServiceModel.CountService({ filter:{} });
+        const years = MethodModel.GetYears({});
+
+        return res.render(`s/statictics.hbs`, {
+            years: await years,
+            moneys: await moneysPromise,
+            servicesCount: await serviceCountPromise,
             ubication: `Resumen`,
         });
     }
@@ -48,7 +75,6 @@ class UserController extends BaseController {
 
         Params.nowTotal = `${Params.list.length+(pag*10)} / ${Params.count}`;
         Params.nowPathEnd = (Params.list.length-9)>0 ? true : false;
-        console.log(Params.list.length, Params.nowPathEnd)
         
         Params.requirePagination = Params.count > 10 ? true : false;
 
@@ -73,7 +99,6 @@ class UserController extends BaseController {
         }
 
         const Params = {data:user};
-        console.log(Params);
         return res.render(`s/user/show.hbs`, Params);  
     }
 

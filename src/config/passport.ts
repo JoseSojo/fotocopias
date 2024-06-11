@@ -9,11 +9,14 @@ passport.use("local.login", new Strategy({
     const model = UserModel; 
     const user = await model.FindUserByEmail({email});
 
+    // await UserModel.StaticticsUpdate({});
+
     if (user) {
         const dbPassword: string = user.password;
         const match = await model.ComparePassword({password, dbPassword});
 
         if (match) {
+
           return done(null, user);
         }
 

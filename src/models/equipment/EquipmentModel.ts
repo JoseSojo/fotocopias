@@ -12,6 +12,7 @@ class MethodModel extends AbstractModel {
         this.StartPrisma();
         const result = await this.prisma.equipment.create({data});  
         this.DistroyPrisma();
+        this.StaticticsUpdate({});
         return result;
     }
 

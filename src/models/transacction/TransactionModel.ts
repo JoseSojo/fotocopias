@@ -8,11 +8,25 @@ class TransactionModel extends AbstractModel {
         super();
     }
 
+    // count
+    public async CountAllTransactions({}:{}) {
+        this.StartPrisma();
+        const allPromise = this.prisma.transaction.count({});
+        const egresoPromise = this.prisma.transaction.count({ where:{ OR:[{type:`EGRESO`}, {concepto: { startsWith:`egreso` }}] } });
+        const ingresoPromise = this.prisma.transaction.count({ where:{ OR:[{type:`INGRESO`}, {concepto: { startsWith:`ingreso` }}] } });
+        const all = await allPromise;
+        const egreso = await egresoPromise;
+        const ingreso = await ingresoPromise;
+        this.DistroyPrisma();
+        return { all,egreso,ingreso };
+    }
+
     // crear Transaction
     public async CreateTransaction({data}:{data:TransactionCreateType}) {
         this.StartPrisma();
         const result = await this.prisma.transaction.create({data});
         this.DistroyPrisma();
+        this.StaticticsUpdate({});
         return result;
     }   
     
@@ -60,6 +74,23 @@ class TransactionModel extends AbstractModel {
         });
         if(result == null) return null;
         
+        this.DistroyPrisma();
+        return result;
+    }
+
+    // statics users actives
+    public async UsersActives({limit=5}:{limit:number}) {
+        this.StartPrisma();
+        const result = await this.prisma.transaction.groupBy({
+            by: "createBy",
+            _count: {
+                createBy:true
+            },
+            orderBy: {
+                createBy: "asc"
+            },
+            take: limit,
+        });
         this.DistroyPrisma();
         return result;
     }

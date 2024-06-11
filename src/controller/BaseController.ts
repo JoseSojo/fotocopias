@@ -66,6 +66,17 @@ class BaseController {
             return res.status(500).json({ok:false});   
         }
     }
+
+    public async StartStaticticsForYear(req: Request, res: Response) {
+        const date = new Date();
+        const year = date.getFullYear();
+
+        const result = await UserModel.CreateStatictisForYear({ year });
+
+        return res.json({ body:result });
+
+
+    }
 }
 
 export default BaseController;

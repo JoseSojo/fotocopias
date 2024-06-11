@@ -55,7 +55,7 @@ class MethodController extends BaseController {
     public async CreateEquipment(req: Request, res: Response) {
         const {name, description} = req.body;
         const user = req.user as UserCompleted;
-        const result = await EquipmentModel.CreateEquipment({data:{name,description,createBy:user.userId}});
+        await EquipmentModel.CreateEquipment({data:{name,description,createBy:user.userId}});
         req.flash(`succ`, `Equipo creado, ${name}`);
         return res.redirect(`/stock/equipment`);
     }
@@ -64,7 +64,7 @@ class MethodController extends BaseController {
         const {name, description} = req.body;
         const id = req.params.id;
         const user = req.user as UserCompleted;
-        const result = await EquipmentModel.UpdateEquipment({id,data:{name,description,createBy:user.userId}});
+        await EquipmentModel.UpdateEquipment({id,data:{name,description,createBy:user.userId}});
         req.flash(`succ`, `Equipo actualizado, ${name}`);
         return res.redirect(`/stock/equipment`);
     }

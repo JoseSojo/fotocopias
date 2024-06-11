@@ -52,8 +52,6 @@ class ServiceTypeController extends BaseController {
         const id = req.params.id;
         const type = await ServiceModel.GetTypeById({id});
 
-        console.log(type);
-
         const ToView = {data:type};
         return res.render(`s/service/type/show.hbs`, ToView);
     }

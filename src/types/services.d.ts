@@ -1,4 +1,4 @@
-import { User } from "@prisma/client"
+
 import { StockCompleted } from "./stock"
 import { TransactionCompleted } from "./transaction.d"
 import { UserCompleted } from "./user.d"

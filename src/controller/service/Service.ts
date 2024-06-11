@@ -8,6 +8,7 @@ import { ServiceCreate, TypeCreate } from "../../types/services";
 import { UserCompleted } from "../../types/user";
 import { TransactionCreate } from "../../types/transaction";
 import TransactionModel from "../../models/transacction/TransactionModel";
+import { MoneyCreate } from "../../types/method";
 
 class ServiceController extends BaseController {
 
@@ -18,9 +19,11 @@ class ServiceController extends BaseController {
     public async RenderDashboard(req: Request, res: Response) {
 
         const stockPromise = StockModel.GetAllStock({ pag:0, limit:100 });
+        const statisticsServiceType = ServiceModel.StatisticsServicesType();
 
         const ToView = {
-            stock: await stockPromise
+            stock: await stockPromise,
+            staticticsServiceType: await statisticsServiceType
         };
         return res.render(`s/service/dashboard.hbs`, ToView);
     }
@@ -72,60 +75,20 @@ class ServiceController extends BaseController {
         const id = req.params.id;
         const service = await ServiceModel.GetServiceById({id});
         const ToView = {data:service};
-        console.log(service);
         return res.render(`s/service/show.hbs`, ToView);
     }
-
 
     public async CreateTypePost(req:Request, res: Response) {
         const {date, description, stockExpenseId,serviceType,quantity,equipment,method,mount,concepto} = req.body;
         const user = req.user as UserCompleted;
-        
-        console.log(req.body);
-
-        /*const data: ServiceCreate = {
-            date, description,
-            createBy:user.userId,
-            equipmentId:equipment,
-            listServicesReferences: serviceType,
-            transactionId: ``
-        }
-
-        const transactionSave: TransactionCreate = {
-            concepto,
-            mount: Number(mount),
-            createBy: user.userId,
-            methodPaymentId: method
-        }
-
-        const stock = await StockModel.GetStockById({id:stockExpenseId});
-        if(!stock) {
-            req.flash(`err`, `Error temporal, intentelo más tarde`);
-            return res.redirect(`/service`);
-        }
-
-        // actualiza stock
-        const save = stock.quantity - Number(quantity);
-        console.log(`de: ${stock.quantity} quedaron ${save}, ${quantity}`);
-        const stockPromise = StockModel.UpdateStock({ id:stock.stockId, data:{quantity:save} });
-
-        const transactionResult = await TransactionModel.CreateTransaction({ data:transactionSave });
-        data.transactionId = transactionResult.transactionId;
-
-        const servicePromise = ServiceModel.CreateService({ data });
-
-        await stockPromise;
-        await servicePromise;*/
-
+      
         req.flash(`succ`, `Servicio creado.`);
         return res.redirect(`/service/types`);
     }
 
     public async CreateServicePost(req:Request, res: Response) {
-        const {date, description, stockExpenseId,serviceType,quantity,equipment,method,mount,concepto} = req.body;
+        const {date, description, stockExpenseId,serviceType,quantity,equipment,method,mount,concepto, moneyId} = req.body;
         const user = req.user as UserCompleted;
-        
-        console.log(req.body);
 
         const data: ServiceCreate = {
             date, 
@@ -140,7 +103,8 @@ class ServiceController extends BaseController {
             concepto,
             mount: Number(mount),
             createBy: user.userId,
-            methodPaymentId: method
+            methodPaymentId: method,
+            type: "INGRESO"
         }
 
         const stock = await StockModel.GetStockById({id:stockExpenseId});
@@ -156,12 +120,13 @@ class ServiceController extends BaseController {
         const transactionResult = await TransactionModel.CreateTransaction({ data:transactionSave });
         data.transactionId = transactionResult.transactionId;
 
-        console.log(data);
+        const updateSaldoPromise = MethodModel.UpdateSaldo({ id: moneyId, saldo:mount });
 
         const servicePromise = ServiceModel.CreateService({ data });
 
         await stockPromise;
         await servicePromise;
+        await updateSaldoPromise;
 
         req.flash(`succ`, `Servicio creado.`);
         return res.redirect(`/service/types`);

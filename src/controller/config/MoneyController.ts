@@ -47,7 +47,6 @@ class ConfigController extends BaseController {
 
         Params.nowTotal = `${Params.list.length+(pag*10)} / ${Params.count}`;
         Params.nowPathEnd = (Params.list.length-9)>0 ? true : false;
-        console.log(Params.list.length, Params.nowPathEnd)
         
         Params.requirePagination = Params.count > 10 ? true : false;
 
@@ -100,7 +99,6 @@ class ConfigController extends BaseController {
 
         Params.nowTotal = `${Params.list.length+(pag*10)} / ${Params.count}`;
         Params.nowPathEnd = (Params.list.length-9)>0 ? true : false;
-        console.log(Params.list.length, Params.nowPathEnd)
         
         Params.requirePagination = Params.count > 10 ? true : false;
 
@@ -133,7 +131,6 @@ class ConfigController extends BaseController {
             data:method,
             methodTransaction: 20,
         };
-        console.log(Params);
         return res.render(`s/config/method/show.hbs`, Params);  
     }
 

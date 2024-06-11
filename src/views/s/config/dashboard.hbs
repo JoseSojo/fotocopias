@@ -1,48 +1,90 @@
 <link href="/assets/css/dashboard/dash_1.css" rel="stylesheet" type="text/css" />
 
 <div class="container">
-    <div class="row">
-        <div class="col-xl-4 col-lg-12 col-md-6 col-sm-12 col-12 card mx-2">
-            <div class="card-body row">
-                <div class="m-auto col-4">
-                    <i class="bi bi-coin" style="font-size: 30px ;border-radius: 50%;"></i>
+    <div class="row mt-3">
+
+        <div class="col-xl-8 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+            <div class="container" style="height: auto;">
+                <div class="row">
+                    <div class="col-6 card">
+                        <div class="card-body row">
+                            <div class="m-auto col-4">
+                                <i class="bi bi-coin" style="font-size: 30px ;border-radius: 50%;"></i>
+                            </div>
+                            <div class="m-auto col-8 d-grid">
+                                <a href="/config/money/create" class="btn btn-primary"><b>Crear moneda</b></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 card">
+                        <div class="card-body row">
+                            <div class="m-auto col-4">
+                                <i class="bi bi-coin" style="font-size: 30px ;border-radius: 50%;"></i>
+                            </div>
+                            <div class="m-auto col-8 d-grid">
+                                <a href="/config/moneys" class="btn btn-primary"><b>Lista monedas</b></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 card">
+                        <div class="card-body row">
+                            <div class="m-auto col-4">
+                                <i class="bi bi-credit-card-fill" style="font-size: 30px ;border-radius: 50%;"></i>
+                            </div>
+                            <div class="m-auto col-8 d-grid">
+                                <a href="/config/method/create" class="btn btn-primary"><b>Crear método</b></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 card">
+                        <div class="card-body row">
+                            <div class="m-auto col-4">
+                                <i class="bi bi-credit-card-fill" style="font-size: 30px ;border-radius: 50%;"></i>
+                            </div>
+                            <div class="m-auto col-8 d-grid">
+                                <a href="/config/methods" class="btn btn-primary"><b>Crear moneda</b></a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="m-auto col-8 d-grid">
-                    <a href="/config/money/create" class="btn btn-primary"><b>Crear moneda</b></a>
+                
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-md-12 col-sm-12 col-12 layout-spacing">
+            <div class="widget widget-chart-two">
+                <div class="widget-heading">
+                    <h5 class="">Gráfica: Ingreso / Egresos</h5>
+                </div>
+                <div class="widget-content">
+                    <div id="chart-mount" class=""></div>
                 </div>
             </div>
         </div>
-        <div class="col-xl-4 col-lg-12 col-md-6 col-sm-12 col-12 card mx-2">
-            <div class="card-body row">
-                <div class="m-auto col-5">
-                    <i class="bi bi-coin" style="font-size: 30px;">{{countMoney}}</i>
+
+        <div class="col-lg-6 col-md-12 col-sm-12 col-12 layout-spacing">
+            <div class="widget widget-chart-two">
+                <div class="widget-heading">
+                    <h5 class="">Gráfica: Métodos de pago</h5>
                 </div>
-                <div class="m-auto col-7">
-                    <a href="/config/moneys" class="btn btn-primary"><b>Lista monedas</b></a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row mt-2">
-        <div class="col-xl-4 col-lg-12 col-md-6 col-sm-12 col-12 card mx-2">
-            <div class="card-body row">
-                <div class="m-auto col-4">
-                    <i class="bi bi-credit-card-fill" style="font-size: 30px ;border-radius: 50%;"></i>
-                </div>
-                <div class="m-auto col-8 d-grid">
-                    <a href="/config/method/create" class="btn btn-primary"><b>Crear metodos</b></a>
+                <div class="widget-content">
+                    <div id="chart-method" class=""></div>
                 </div>
             </div>
         </div>
-        <div class="col-xl-4 col-lg-12 col-md-6 col-sm-12 col-12 card mx-2">
-            <div class="card-body row">
-                <div class="m-auto col-5">
-                    <i class="bi bi-credit-card-fill" style="font-size: 30px;">{{countMethod}}</i>
+
+        {{!-- <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+            <div class="widget widget-chart-two">
+                <div class="widget-heading">
+                    <h5 class="">Gráfica: Montos</h5>
                 </div>
-                <div class="m-auto col-7">
-                    <a href="/config/methods" class="btn btn-primary"><b>Lista metodos</b></a>
+                <div class="widget-content">
+                    <div id="chart-ingreso" class=""></div>
                 </div>
             </div>
-        </div>
+        </div> --}}
     </div>
 </div> 
+
+<script src="/plugins/apex/apexcharts.min.js"></script>
+<script src="/js/methodStatic.js"></script>

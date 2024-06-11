@@ -1,0 +1,17 @@
+-- CreateTable
+CREATE TABLE "StaticticsForYear" (
+    "staticticsForYearId" TEXT NOT NULL PRIMARY KEY,
+    "year" INTEGER NOT NULL,
+    "enero" DECIMAL NOT NULL DEFAULT 0.0,
+    "febrero" DECIMAL NOT NULL DEFAULT 0.0,
+    "marzo" DECIMAL NOT NULL DEFAULT 0.0,
+    "abril" DECIMAL NOT NULL DEFAULT 0.0,
+    "mayo" DECIMAL NOT NULL DEFAULT 0.0,
+    "junio" DECIMAL NOT NULL DEFAULT 0.0,
+    "julio" DECIMAL NOT NULL DEFAULT 0.0,
+    "agosto" DECIMAL NOT NULL DEFAULT 0.0,
+    "septiembre" DECIMAL NOT NULL DEFAULT 0.0,
+    "octubre" DECIMAL NOT NULL DEFAULT 0.0,
+    "noviembre" DECIMAL NOT NULL DEFAULT 0.0,
+    "diciembre" DECIMAL NOT NULL DEFAULT 0.0
+);

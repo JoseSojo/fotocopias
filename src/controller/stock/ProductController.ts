@@ -51,8 +51,8 @@ class StockController extends BaseController {
         const Params = {
             data:stock,
             methods: await methodsPromise,
-            moneys: await moneyPromise};
-        console.log(stock);
+            moneys: await moneyPromise
+        };
         return res.render(`s/stock/show.hbs`, Params);  
     }
 
@@ -102,7 +102,8 @@ class StockController extends BaseController {
                 concepto,
                 createBy: user.userId,
                 methodPaymentId: methodId,
-                mount: Number(mount)
+                mount: Number(mount),
+                type: `EGRESO`
             }});
             objInsert.transactionId = resultTransaction.transactionId;
             const result = await StockModel.CreateStock({ data: objInsert });
@@ -135,7 +136,8 @@ class StockController extends BaseController {
                 concepto,
                 createBy: user.userId,
                 methodPaymentId: methodId,
-                mount: Number(mount)
+                mount: Number(mount),
+                type: `EGRESO`
             }});
             objInsert.transactionId = resultTransaction.transactionId;
             const result = await StockModel.UpdateStock({id, data: objInsert });

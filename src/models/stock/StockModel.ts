@@ -14,6 +14,7 @@ class StockModel extends AbstractModel {
         this.StartPrisma();
         const result = await this.prisma.stock.create({data});
         this.DistroyPrisma();
+        this.StaticticsUpdate({});
         return result; // StockCompleto
     }
 
@@ -63,6 +64,41 @@ class StockModel extends AbstractModel {
         this.DistroyPrisma();
         return result;
     }
+    
+
+    // statictics globals
+    public async StaticticsAll({}: {}) {
+        this.StartPrisma();
+        
+        const equipmentsPromise = this.prisma.equipment.findMany({ select: {name:true,equipmentId:true, servicesId:true }});
+        const serviceTypePromise = this.prisma.serviceType.findMany({ select: { name:true, serviceTypeId:true, services:true } });
+
+        const resultEquipment: {name:string,id:string,count:number}[] = []; 
+
+        const equipments = await equipmentsPromise;
+        equipments.forEach(key => {
+            resultEquipment.push({
+                name: key.name,
+                id: key.equipmentId,
+                count: key.servicesId.length
+            })
+        })
+
+        const resultServiceType: {name:string,id:string,count:number}[] = []; 
+
+        const servicesType = await serviceTypePromise;
+        servicesType.forEach(key => {
+            resultServiceType.push({
+                name: key.name,
+                id: key.serviceTypeId,
+                count: key.services.length
+            })
+        })
+
+        this.DistroyPrisma();
+        return {resultServiceType, resultEquipment};
+    }
+
 }
 
 export default new StockModel();

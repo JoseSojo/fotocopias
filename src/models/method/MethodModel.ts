@@ -23,6 +23,7 @@ class MethodModel extends AbstractModel {
         this.StartPrisma();
         const result = await this.prisma.money.create({data});
         this.DistroyPrisma();
+        this.StaticticsUpdate({});
         return result;
     }   
     
@@ -32,7 +33,18 @@ class MethodModel extends AbstractModel {
         const result = await this.prisma.money.update({data, where:{moneyId:id}});
         this.DistroyPrisma();
         return result;
-    }    
+    }  
+    
+    // actualiza moneda
+    public async UpdateSaldo({id,saldo}:{id:string,saldo:number}) {
+        this.StartPrisma();
+        const findMoney = await this.GetMoneyById({id});
+        if(!findMoney) return;
+        const saldoSave = Number(findMoney.saldo) + Number(saldo);
+        const result = await this.prisma.money.update({data:{saldo:saldoSave}, where:{moneyId:id}});
+        this.DistroyPrisma();
+        return result;
+    }  
 
     // elimina moneda
     public async DeleteMoney({id}:{id:string}) {
@@ -73,6 +85,7 @@ class MethodModel extends AbstractModel {
         this.StartPrisma();
         const result = await this.prisma.paymentMethod.create({data});
         this.DistroyPrisma();
+        this.StaticticsUpdate({});
         return result; // MethodPayment completo
     }
 
@@ -105,7 +118,6 @@ class MethodModel extends AbstractModel {
             }
         });
         this.DistroyPrisma();
-        console.log(result);
         return result;
     }
 
@@ -122,6 +134,49 @@ class MethodModel extends AbstractModel {
         if(result == null) return null;
         this.DistroyPrisma();
         return result;
+    }
+
+    public async StaticticsMethod({}:{}) {
+        this.StartPrisma();
+
+        const allPromise = this.prisma.transaction.groupBy({
+            by: "methodPaymentId",
+            _count: { methodPaymentId:true }
+        });
+
+        const methodPromise = this.prisma.paymentMethod.findMany({
+            select: { title:true, paymentMethodId: true }
+        })
+
+        const all = await allPromise;
+        const method = await methodPromise;
+
+        const newList: any[] = [];
+
+        all.forEach((key) => {
+            newList.push({
+                count: key._count.methodPaymentId,
+                name: method.find(item => item.paymentMethodId == key.methodPaymentId),
+                methodPaymentId: key.methodPaymentId
+            })
+        })
+
+        this.DistroyPrisma();
+        return {newList};
+    }
+
+    public async StaticticsEgresoIngreso({}:{}) {
+        this.StartPrisma();
+        const countIngresoPromise = this.prisma.transaction.count({ where: {type:`INGRESO`} });
+        const countEgresoPromise = this.prisma.transaction.count({ where: {type:`EGRESO`} });
+        const countsMountsPromise = this.prisma.transaction.groupBy({ _sum: { mount:true }, by: "type" });
+
+        const ingreso = await countIngresoPromise;
+        const egreso = await countEgresoPromise;
+        const mount = await countsMountsPromise;
+
+        this.DistroyPrisma();
+        return {ingreso,egreso,mount}
     }
 }
 

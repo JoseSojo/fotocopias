@@ -17,6 +17,7 @@ import StockController from './controller/stock/ProductController';
 import EquipmentController from './controller/stock/EquipmentController';
 import ServiceTypeController from './controller/service/ServiceType';
 import ServiceController from './controller/service/Service';
+import StaticticsController from './controller/API/Statictics';
 
 // start
 class App {
@@ -27,7 +28,7 @@ class App {
     }
 
     public Start () {
-        this.app.use(morgan('dev'));
+        // this.app.use(morgan('dev'));
         this.app.use(express.json());
         this.app.use(express.urlencoded({extended:false}));
         this.app.use(flash());
@@ -81,6 +82,7 @@ class App {
         // routes users
         const user = new UserController();
         this.app.get(`/dashboard`, OnSession , user.DashboardController);
+        this.app.get(`/statictics`, OnSession , user.StaticticsController);
 
         // users
         this.app.get(`/users`, OnSession , user.RenderDashboard);
@@ -152,11 +154,20 @@ class App {
 
         // start user
         this.app.get(`/init/app/user`, user.InsertUserBase);
+        this.app.get(`/init/app/history`, user.StartStaticticsForYear);
 
         // routes auth
         const auth = new AuthController();
         this.app.get(`/login`, OffSession, auth.LoginRender);
         this.app.post(`/login`, OffSession, auth.LoginController);
+
+        // api
+        const api = new StaticticsController();
+        this.app.get(`/api/statictics/type`, api.APIStaticticsServiceType);
+        this.app.get(`/api/statictics/user`, api.APIStaticticsTop5Users);
+        this.app.get(`/api/statictics/foryear`, api.APIStaticsForYear);
+        this.app.get(`/api/statictics/method`, api.APIStaticsMethodPayment);
+        this.app.get(`/api/statictics/stock`, api.APIStockStaticitcs);
     }
 
     public Run () {

@@ -2,10 +2,14 @@
 import { NextFunction, Request, Response } from "express";
 import BaseController from "../BaseController";
 import passport from "passport";
+import MethodModel from "../../models/method/MethodModel";
+import StockModel from "../../models/stock/StockModel";
 
 class AuthController extends BaseController {
 
-    public LoginRender(req: Request, res: Response) {
+    public async LoginRender(req: Request, res: Response) {
+        // const result = await StockModel.StaticticsAll({});
+        // console.log(result);
         return res.render(`p/login.hbs`);
     }
 
