@@ -1,0 +1,99 @@
+<link href="/assets/css/users/user-profile.css" rel="stylesheet" type="text/css" />
+
+<div class="container">
+    <div class="row">
+        <div class="card col-lg-6 col-md-5 col-sm-12 layout-top-spacing">
+            <div class="card-body">
+                <h4>{{data.name}}</h4>
+                <p class="text-muted">cantidad: <b>{{data.quantity}}</b></p>
+                <p class="text-muted">descripción: <b>{{data.description}}</b></p>
+
+                <div class="mt-4">
+                    <p>
+                        <h5>Fechas</h5>
+                        <span class="">Creado el:</span><br>
+                        <b>
+                            {{#formatDate data.create_at}}
+                                {{this}}
+                            {{/formatDate}}
+                        </b>
+                    </p>
+                    <p>
+                        <span class="">Última actualización el:</span><br>
+                        <b>
+                            {{#formatDate data.update_at}}
+                                {{this}}
+                            {{/formatDate}}
+                        </b>
+                    </p>
+                </div>
+
+                <div class="mt-4">
+                    <h5>Creado por:</h5>
+                    <p>
+                        <span>usuario</span> <b>{{data.updateReference.username}}</b>
+                    </p>
+                    <p>
+                        <span>correo</span> <b>{{data.updateReference.email}}</b>
+                    </p>
+                </div>
+
+                <div class="mt-4">
+                    <h5>Transacción:</h5>
+                    <p>
+                        <span>monto</span> <b>{{data.transaction.mount}} {{data.moneyReference.prefix}}</b>
+                    </p>
+                    <p>
+                        <span>concepto</span> <b>{{data.transaction.concepto}}</b>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-md-5 col-sm-12 layout-top-spacing">
+            <div class="card">
+                <form method="post" action="/stock/{{data.stockId}}/update" class="card-body form-row col-12">
+                    <div class="form-group col-12">
+                        <label for="t-quantity" class="">Cantidad:</label>
+                        <input id="t-quantity" type="number" name="quantity" value="{{data.quantity}}" class="form-control" required>
+                    </div>
+
+                    <div class="form-group col-12">
+                        <label for="t-mthod" class="">Método de pago:</label>
+                        <select id="t-mthod" type="text" name="methodId" class="form-control" required>
+                            <option value="NULL">selecciona una opción</option>
+                            {{#each methods}}
+                                <option value="{{this.paymentMethodId}}">{{this.title}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+
+                    <div class="form-group col-12">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <label for="t-mount" class="col-12">Precio total:</label>
+                                <input id="t-mount" type="text" name="mount" class="form-control col-8" required>
+
+                                <select id="t-mthod" type="text" name="moneyId" class="form-control col-4" required>
+                                    <option value="NULL">selecciona una opción</option>
+                                    {{#each moneys}}
+                                        <option value="{{this.moneyId}}">{{this.title}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-12">
+                        <label for="t-concepto" class="">Concepto de transacción:</label>
+                        <textarea id="t-concepto" name="concepto" class="form-control" required></textarea>
+                    </div>  
+
+                    <div class="col-12">
+                        <input type="submit" class="btn btn-primary" value="Actualizar" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

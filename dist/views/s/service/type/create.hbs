@@ -1,0 +1,37 @@
+
+<div class="container">
+    <div class="row d-flex justify-content-between mb-2">
+        <span></span>
+        <div class="">
+            <a href="/service" class="btn btn-primary">panel</a>
+            <a href="/service/types" class="btn btn-primary">lista</a>
+        </div>
+    </div>
+
+    <form method="post" action="/service/types/create" class="form-row col-12 col-lg-6">
+
+        <div class="form-group col-12">
+            <label for="t-name" class="">Nombre:</label>
+            <input id="t-name" type="text" name="name" class="form-control" required>
+        </div>
+
+        <div class="form-group col-12">
+            <label for="t-prefix" class="">Descripción:</label>
+            <textarea id="t-prefix" name="description" class="form-control" required></textarea>
+        </div>  
+
+        <div class="form-group col-12">
+            <label for="t-mthod" class="">Producto:</label>
+            <select id="t-mthod" type="text" name="stockExpenseId" class="form-control" required>
+                <option value="NULL">selecciona una opción</option>
+                {{#each stock}}
+                    <option value="{{this.stockId}}">{{this.name}}</option>
+                {{/each}}
+            </select>
+        </div>
+
+        <div class="col-12">
+            <input type="submit" class="btn btn-primary" value="Crear" />
+        </div>
+    </form>
+</div> 

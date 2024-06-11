@@ -1,0 +1,93 @@
+<link href="/assets/css/dashboard/dash_1.css" rel="stylesheet" type="text/css" />
+{{!-- <link href="assets/css/dashboard/dash_2.css" rel="stylesheet" type="text/css" /> --}}
+
+<div class="container">
+    <div class="row layout-top-spacing">
+
+        {{#each moneys}}
+            <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12 layout-spacing">
+                <div class="widget widget-account-invoice-one">
+
+                    <div class="widget-heading">
+                        <h5 class="">{{this.title}}</h5>
+                    </div>
+
+                    <div class="widget-content">
+                        <div class="invoice-box">
+                            
+                            <div class="acc-total-info">
+                                <h5>Saldo actual</h5>
+                                <p class="acc-amount">{{this.saldo}} {{this.prefix}}</p>
+                            </div>
+
+                            {{!-- <div class="inv-detail">                                        
+                                <div class="info-detail-1">
+                                    <p>Monthly Plan</p>
+                                    <p>$ 199.0</p>
+                                </div>
+                                <div class="info-detail-2">
+                                    <p>Taxes</p>
+                                    <p>$ 17.82</p>
+                                </div>
+                                <div class="info-detail-3 info-sub">
+                                    <div class="info-detail">
+                                        <p>Extras this month</p>
+                                        <p>$ -0.68</p>
+                                    </div>
+                                    <div class="info-detail-sub">
+                                        <p>Netflix Yearly Subscription</p>
+                                        <p>$ 0</p>
+                                    </div>
+                                    <div class="info-detail-sub">
+                                        <p>Others</p>
+                                        <p>$ -0.68</p>
+                                    </div>
+                                </div>
+                            </div> --}}
+
+                            <div class="inv-action">
+                                <a href="/" class="btn btn-dark">Ver movimientos</a>
+                                {{!-- <a href="" class="btn btn-danger">Ver movimientos</a> --}}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        {{/each}}
+        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12 layout-spacing">
+                <div class="widget widget-account-invoice-one">
+
+                    <div class="widget-heading">
+                        <h5 class="">Resumen: transacciones</h5>
+                    </div>
+
+                    <div class="widget-content">
+                        <div class="invoice-box">
+                        
+                            <div class="inv-detail">                                        
+                                <div class="info-detail-1">
+                                    <p>total</p>
+                                    <p>{{transactionCount}}</p>
+                                </div>
+                                <div class="info-detail-2">
+                                    <p>ingreso</p>
+                                    <p>{{ingresoCount}}</p>
+                                </div>
+                                <div class="info-detail-2">
+                                    <p>egreso</p>
+                                    <p>{{egresoCount}}</p>
+                                </div>
+                            </div>
+
+                            <div class="inv-action">
+                                <a href="/" class="btn btn-dark">Ver transacciones</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+    </div>
+
+</div>

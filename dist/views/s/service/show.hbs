@@ -1,0 +1,51 @@
+
+<div class="container">
+    <div class="row d-flex justify-content-between mb-2">
+        <span></span>
+        <div class="">
+            <a href="/service" class="btn btn-primary">panel</a>
+            <a href="/service/list" class="btn btn-primary">list</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 card">
+            <div class="card-body row">
+                <div class="col-12">
+                    <p class="h4">Descripción <b>{{data.description}}</b></p>
+                    <p class="">Creado el <b>{{data.date}}</b></p>
+                    <p class="">Fecha sistema <b>{{#formatDate data.create_at}}{{this}}{{/formatDate}}</b></p>
+                </div>
+
+                <div class="col-12 col-md-6 mt-4">
+                    <h4>Creador:</h4>
+                    <p>Nombre completo: <b>{{data.createReference.name}} {{data.createReference.lastname}}</b></p>
+                    <p>Correo: <b>{{data.createReference.email}}</b></p>
+                    <p>Usuario: <b>{{data.createReference.username}}</b></p>
+                </div>
+
+                <div class="col-12 col-md-6 mt-4">
+                    <h4>Equipo:</h4>
+                    <p>Nombre: <b>{{data.equipmentReference.name}}</b></p>
+                    <p>Descripción: <b>{{data.equipmentReference.description}}</b></p>
+                    <p>Creado el: <b>{{#formatDate data.equipmentReference.create_at}}{{this}}{{/formatDate}}</b></p>
+                </div>
+
+                <div class="col-12 col-md-6 mt-4">
+                    <h4>Servicio:</h4>
+                    <p>Nombre: <b>{{data.typeReferences.name}}</b></p>
+                    <p>Descripción: <b>{{data.typeReferences.description}}</b></p>
+                    <p>Producto: <b>{{data.typeReferences.stockExpenseReference.name}}</b></p>
+                </div>
+
+                <div class="col-12 col-md-6 mt-4">
+                    <h4>Transacción:</h4>
+                    <p>Concepto: <b>{{data.transaction.concepto}}</b></p>
+                    <p>Monto: <b>{{data.transaction.mount}}</b></p>
+                    <p>Método de pago: <b>{{data.transaction.methodPaymentReference.title}}</b></p>
+                    <p>Moneda: <b>{{data.transaction.methodPaymentReference.moneyReference.title}}</b></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

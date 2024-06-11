@@ -1,0 +1,38 @@
+
+<div class="container">
+    <div class="row d-flex justify-content-between mb-2">
+        <span></span>
+        <div class="">
+            <a href="/config" class="btn btn-primary">panel</a>
+            <a href="/config/methods" class="btn btn-primary">lista</a>
+        </div>
+    </div>
+
+    <form method="post" action="/config/method/create" class="form-row col-12 col-lg-6 m-auto">
+
+        <div class="form-group col-12">
+            <label for="t-title" class="">Titulo:</label>
+            <input id="t-title" type="text" name="title" class="form-control" required>
+        </div>  
+
+        <div class="form-group col-12">
+            <label for="t-description" class="">Descripción:</label>
+            <input id="t-description" type="text" name="description" class="form-control" required>
+        </div>  
+
+        <div class="form-group col-12">
+            <label for="t-description" class="">Moneda:</label>
+            <select class="form-control basic" name="money">
+                <option selected="selected">selecione una opción</option>
+                {{#each moneys}}
+                    <option value="{{this.moneyId}}">{{this.title}}</option>
+                {{/each}}
+            </select>
+        </div> 
+        
+
+        <div class="col-12 mt-4">
+            <input type="submit" class="btn btn-primary" value="Crear" />
+        </div>
+    </form>
+</div> 
