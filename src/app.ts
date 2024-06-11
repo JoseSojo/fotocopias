@@ -173,7 +173,7 @@ class App {
     public Run () {
         this.Start();
 
-        const PORT = process.env.post ? process.env.post : 9321;
+        const PORT = process.env.PORT ? process.env.PORT : 9321;
         this.app.listen(
             PORT,
             () => {
