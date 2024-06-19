@@ -8,6 +8,18 @@ import { UserCompleted, UserCreate } from "../../types/user";
 
 class UserController extends BaseController {
 
+    public async RenderProfile(req: Request, res: Response) {
+
+        const user = req.user as UserCompleted;
+        const userData = await UserModel.FindUserById({id:user.userId});
+
+        const Params = {
+            data: userData,
+        }
+
+        return res.render(`s/user/profile.hbs`, Params);
+    }
+
     public async DashboardController (req: Request, res: Response) {
         const date = new Date();
         const pag = req.params.pag | 0;
@@ -153,6 +165,37 @@ class UserController extends BaseController {
             return res.redirect(`/users`);
         }
     }
+
+    public async UpdateDataUser(req: Request, res: Response) {
+        const {email,username,name,lastname} = req.body;
+        const id = req.params.id;
+        
+        const result = await UserModel.UpdateUser({ id, data:{email,username,name,lastname} });
+        return res.redirect(`/profile`);
+    }
+
+    public async UpdatePasswordUser(req: Request, res: Response) {
+        const {nowPassword, newPassword} = req.body;
+        const id = req.params.id;
+        const user = await UserModel.FindUserById({ id });
+        if(!user) {
+            req.flash(`error`, `Oops, error temporal.`);
+            return res.redirect(`/profile`);
+        }
+        const password = await UserModel.HashPassword({ password:newPassword });
+
+        const compare = await UserModel.ComparePassword({ dbPassword:user.password, password:nowPassword })
+        if(!compare) {
+            req.flash(`error`, `Verifica tu actual contraseña`);
+            return res.redirect(`/profile`);
+        }
+
+        await UserModel.UpdateUser({ id, data:{password} });
+        req.flash(`succ`, `Contraseña actualizada`);
+        return res.redirect(`/profile`);
+    }
+
+
 }
 
 export default UserController;

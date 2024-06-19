@@ -20,6 +20,11 @@ class AuthController extends BaseController {
         })(req, res, next);
     }
 
+    public async LogOut(req: Request, res: Response, next: NextFunction) {
+        req.logOut((err)=>{
+            return res.redirect(`/login`);
+        });
+    }    
 }
 
 export default AuthController;

@@ -90,6 +90,9 @@ class App {
         this.app.get(`/users/list`, OnSession , user.RenderList);
         this.app.get(`/user/create`, OnSession , user.RenderCreate);
         this.app.get(`/user/:id/show`, OnSession , user.RenderShow); // show and update
+        this.app.get(`/profile`, OnSession , user.RenderProfile);
+        this.app.post(`/profile/:id/data`, OnSession , user.UpdateDataUser);
+        this.app.post(`/profile/:id/password`, OnSession , user.UpdatePasswordUser);
 
         this.app.post(`/user/create`, OnSession, user.CreateUserPost);
 
@@ -163,6 +166,7 @@ class App {
         // routes auth
         const auth = new AuthController();
         this.app.get(`/login`, OffSession, auth.LoginRender);
+        this.app.get(`/logout`, OnSession, auth.LogOut);
         this.app.post(`/login`, OffSession, auth.LoginController);
 
         // api

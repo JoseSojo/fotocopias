@@ -50,16 +50,22 @@ class UserModel extends AbstractModel {
     // busca usuario por id
     public async FindUserById({id}: {id:string}) {
         this.StartPrisma();
-        const result = await this.prisma.user.findFirst({ where:{userId:id} });
+        const result = await this.prisma.user.findFirst({ 
+            where:{userId:id},
+            include: {
+                _count: true
+            }
+        });
         this.DistroyPrisma();
         return result;
     }
 
     // actualiza usuario por id
-    public async UpdateUser() {
+    public async UpdateUser({id,data}:{id:string,data:any}) {
         this.StartPrisma();
-        
+        const result = this.prisma.user.update({ data, where:{ userId:id } })
         this.DistroyPrisma();
+        return await result;
     }
 
     // agrega eliminación de uaurio

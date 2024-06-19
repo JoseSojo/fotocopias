@@ -1,0 +1,59 @@
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 m-auto card">
+            <div class="card-header">
+                <h3>{{data.username}}</h3>
+                <p>{{data.name}} {{data.lastname}}</p>
+                <p> creado el: <b>{{#formatDate data.create_at }}{{/formatDate}}</b> </p>
+                <p> ultima actualización: <b>{{#formatDate data.update_at }}{{/formatDate}}</b> </p>
+            </div>
+            <div class="card-body">
+                <p> Métodos creados: <b>{{data._count.paymentMethod }}</b> </p>
+                <p> Monedas creadas: <b>{{data._count.meney }}</b> </p>
+                <p> Servicios creados: <b>{{data._count.service }}</b> </p>
+                <p> Tipos creados: <b>{{data._count.serviceType }}</b> </p>
+                <p> Stock creados: <b>{{data._count.stock }}</b> </p>
+                <p> Equipos creados: <b>{{data._count.equipment }}</b> </p>
+                <p> Transacciones creados: <b>{{data._count.transaction }}</b> </p>
+                
+            </div>
+        </div>
+        <div class="col-12 container row mt-3">
+            <div class="col-12 col-lg-6 card">
+                <form method="POST" action="/profile/{{data.userId}}/data" class="card-body form-row">
+                    <label class="col-12 col-md-6">
+                        <span >Nombre:</span>
+                        <input class="form-control" type="text" value="{{data.name}}" placeholder="Nombre" name="name" />
+                    </label>
+                    <label class="col-12 col-md-6">
+                        <span >Apellido:</span>
+                        <input class="form-control" type="text" value="{{data.lastname}}" placeholder="Apellido" name="lastname" />
+                    </label>
+                    <label class="col-12 col-md-6">
+                        <span >Usuario:</span>
+                        <input class="form-control" type="text" value="{{data.username}}" placeholder="Usuario" name="username" />
+                    </label>
+                    <label class="col-12 col-md-6">
+                        <span >Correo electrónico:</span>
+                        <input class="form-control" type="email" value="{{data.email}}" placeholder="Correo" name="email" />
+                    </label>
+                    <input type="submit" value="Actualizar" class="btn btn-primary" />
+                </form>
+            </div>
+            <div class="col-12 col-lg-6 card">
+                <form method="POST" action="/profile/{{data.userId}}/password" class="card-body">
+                    <label class="col-12">
+                        <span >Contraseña actual:</span>
+                        <input class="form-control" type="password" name="nowPassword" />
+                    </label>
+                    <label class="col-12">
+                        <span >Contraseña nueva:</span>
+                        <input class="form-control" type="password" name="newPassword" />
+                    </label>
+                    <input type="submit" value="Actualizar" class="btn btn-primary" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
