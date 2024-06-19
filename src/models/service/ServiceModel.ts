@@ -8,6 +8,33 @@ class ServiceModel extends AbstractModel {
         super();
     }
 
+    public async GetAllServicesFilter({filter}:{filter:{date:string}}) {
+        this.StartPrisma();
+        const result = await this.prisma.service.findMany({ 
+            where:{
+                date:{
+                    equals: filter.date
+                }
+            }, 
+            include: {
+                createReference: true,
+                equipmentReference: true,
+                transaction: {
+                    include: {
+                        methodPaymentReference: {
+                            include: {
+                                moneyReference: true
+                            }
+                        }
+                    }
+                },
+                typeReferences: true
+            }
+        });
+        this.DistroyPrisma();
+        return result;
+    }
+
     public async CreateType({data}:{data:TypeCreate}) {
         this.StartPrisma();
         const result = await this.prisma.serviceType.create({data});

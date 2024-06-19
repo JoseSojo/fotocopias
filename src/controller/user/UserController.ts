@@ -9,14 +9,23 @@ import { UserCompleted, UserCreate } from "../../types/user";
 class UserController extends BaseController {
 
     public async DashboardController (req: Request, res: Response) {
+        const date = new Date();
+        const pag = req.params.pag | 0;
+        const limit = req.params.limit | 10; 
+
         const moneysPromise = MethodModel.GetAllMoney({ pag:0, limit:10 });
         const serviceCountPromise = ServiceModel.CountService({ filter:{} });
         const transactionsCountPromise = TransactionModel.CountAllTransactions({});
         const years = MethodModel.GetYears({});
+        const month = date.getMonth()+1;
+        const toDay = `${date.getFullYear()}-${month<10 ? `0${month}`:`${month}` }-${date.getDate()}`;
+
+        const serviceToDay = ServiceModel.GetAllServicesFilter({ filter:{date:toDay} });
+        const countService = ServiceModel.CountService({ filter:{date:toDay} })
 
         const transsactions = await transactionsCountPromise;
 
-        return res.render(`s/dashboard.hbs`, {
+        const Params = {
             years: await years,
             moneys: await moneysPromise,
             servicesCount: await serviceCountPromise,
@@ -24,7 +33,26 @@ class UserController extends BaseController {
             egresoCount: transsactions.egreso,
             ingresoCount: transsactions.ingreso,
             ubication: `Resumen`,
-        });
+
+            servicesToDay: await serviceToDay,
+            next: `/users/list?pag=${pag+1}`,
+            previous: pag == 0 ? null : `/users/list?pag=${pag-1}`,
+            count: await countService,
+
+            nowTotal: ``,
+            requirePagination: false,
+            nowPath: pag,
+            nowPathOne: pag!=0 ? true : false,
+            nowPathEnd: false,
+            toDay
+        }
+
+        Params.nowTotal = `${Params.servicesToDay.length+(pag*10)} / ${Params.count}`;
+        Params.nowPathEnd = (Params.servicesToDay.length-9)>0 ? true : false;
+        
+        Params.requirePagination = Params.count > 10 ? true : false;
+
+        return res.render(`s/dashboard.hbs`, Params);
     }
 
     public async StaticticsController (req: Request, res: Response) {

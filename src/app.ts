@@ -18,6 +18,7 @@ import EquipmentController from './controller/stock/EquipmentController';
 import ServiceTypeController from './controller/service/ServiceType';
 import ServiceController from './controller/service/Service';
 import StaticticsController from './controller/API/Statictics';
+import TransactionController from './controller/transaction/Transaction';
 
 // start
 class App {
@@ -151,6 +152,9 @@ class App {
         this.app.get(`/service/:id/show`, OnSession, service.RenderShow);
         this.app.post(`/service/create`, OnSession, service.CreateServicePost);
 
+        const transaction = new TransactionController();
+        this.app.get(`/transaction/list`, OnSession, transaction.RenderList);
+        this.app.get(`/transaction/:id/show`, OnSession, transaction.RenderShow);
 
         // start user
         this.app.get(`/init/app/user`, user.InsertUserBase);

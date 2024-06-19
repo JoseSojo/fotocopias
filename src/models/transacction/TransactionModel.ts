@@ -47,10 +47,10 @@ class TransactionModel extends AbstractModel {
     }   
 
     // obtiene todos los Transaction de 10 en 10
-    public async GetAllTransaction({pag, limit=10}:{pag:number, limit:number}) {
+    public async GetAllTransaction({filter,pag, limit=10}:{filter:{},pag:number, limit:number}) {
         this.StartPrisma();
         const result = await this.prisma.transaction.findMany({ 
-            where:{delete_at:null}, 
+            where:filter, 
             skip:pag*limit, 
             take:limit,
             include:{
@@ -68,8 +68,14 @@ class TransactionModel extends AbstractModel {
         const result = await this.prisma.transaction.findFirst({ 
             where:{transactionId:id}, 
             include:{
-                methodPaymentReference: true,
-                createReference:true
+                methodPaymentReference: {
+                    include: {
+                        moneyReference: true
+                    }
+                },
+                createReference:true,
+                service: true,
+                stock: true,
             }, 
         });
         if(result == null) return null;

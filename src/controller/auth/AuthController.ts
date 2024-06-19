@@ -4,12 +4,11 @@ import BaseController from "../BaseController";
 import passport from "passport";
 import MethodModel from "../../models/method/MethodModel";
 import StockModel from "../../models/stock/StockModel";
+import ServiceModel from "../../models/service/ServiceModel";
 
 class AuthController extends BaseController {
 
     public async LoginRender(req: Request, res: Response) {
-        // const result = await StockModel.StaticticsAll({});
-        // console.log(result);
         return res.render(`p/login.hbs`);
     }
 
