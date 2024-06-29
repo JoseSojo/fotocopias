@@ -19,7 +19,9 @@
                             <th>Nombre</th>
                             <th>Usuario</th>
                             <th>Creado el</th>
-                            <th class="text-center">acciones</th>
+                            {{#validRoot user}}
+                                <th class="text-center">acciones</th>
+                            {{/validRoot}}
                         </tr>
                     </thead>
                     <tbody>
@@ -32,11 +34,13 @@
                                         {{this}}
                                     {{/formatDate}}
                                 </td>
-                                <td>
-                                    <a href="/user/{{this.userId}}/show" class="btn py-0 btn-primary">
-                                        <i class="bi bi-eye-fill lead"></i>
-                                    </a>
-                                </td>
+                                {{#validRoot ../user}}
+                                    <td>
+                                        <a href="/user/{{../this.userId}}/show" class="btn py-0 btn-primary">
+                                            <i class="bi bi-eye-fill lead"></i>
+                                        </a>
+                                    </td>
+                                {{/validRoot}}
                             </tr>
                         {{/each}}
                     </tbody>

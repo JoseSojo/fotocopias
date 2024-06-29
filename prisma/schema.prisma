@@ -25,6 +25,8 @@ model User {
   password     String
   last_session DateTime?
 
+  rol          String   @default("ADMIN")
+
   createBy          String?
 
   paymentMethod     PaymentMethod[]

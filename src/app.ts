@@ -18,7 +18,10 @@ import EquipmentController from './controller/stock/EquipmentController';
 import ServiceTypeController from './controller/service/ServiceType';
 import ServiceController from './controller/service/Service';
 import StaticticsController from './controller/API/Statictics';
+import UserReport from './controller/report/UserReport';
 import TransactionController from './controller/transaction/Transaction';
+ 
+import cron from "node-cron";
 
 // start
 class App {
@@ -26,6 +29,18 @@ class App {
 
     constructor () {
         this.app = express();
+    }
+
+    public CornNode () {
+        const date = new Date();
+
+        // cron.schedule("* * * * * *", function () {
+        //     console.log(date.getHours(), date.getMinutes()+1, date.getSeconds());             
+        // });
+
+        cron.schedule("1 1 22 * * *", function () {
+            console.log("a las 7:19");  
+        });
     }
 
     public Start () {
@@ -46,11 +61,11 @@ class App {
         //views [handlebars engine]
         this.app.set('views', path.join(process.cwd(), 'src/views'));
         this.app.engine('hbs', exphbs({
-        defaultLayout: 'main.hbs',
-        layoutsDir: path.join(this.app.get('views'), 'layouts'),
-        partialsDir: path.join(this.app.get('views'), 'partials'),
-        helpers: helpersHandlebars,
-        extname: '.hbs'
+            defaultLayout: 'main.hbs',
+            layoutsDir: path.join(this.app.get('views'), 'layouts'),
+            partialsDir: path.join(this.app.get('views'), 'partials'),
+            helpers: helpersHandlebars,
+            extname: '.hbs'
         }));
         this.app.set('view engine', 'hbs');
 
@@ -176,10 +191,15 @@ class App {
         this.app.get(`/api/statictics/foryear`, api.APIStaticsForYear);
         this.app.get(`/api/statictics/method`, api.APIStaticsMethodPayment);
         this.app.get(`/api/statictics/stock`, api.APIStockStaticitcs);
+
+        // report
+        const userReport = new UserReport();
+        this.app.get(`/report/user/:id`, userReport.ReportUniqueUser);
     }
 
     public Run () {
         this.Start();
+        this.CornNode();
 
         const PORT = process.env.PORT ? process.env.PORT : 9321;
         this.app.listen(

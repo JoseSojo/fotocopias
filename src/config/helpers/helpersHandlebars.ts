@@ -5,8 +5,8 @@ const helpersHandlebars = {
         return `${date.toString().split(`GMT`)[0]}`
     },
 
-    validRoot(rol: string, options: any) {
-        return rol == `ROOT` ? options.fn(true) : options.inverse(false);
+    validRoot(user: any, options: any) {
+        return user.rol == `ROOT` ? options.fn(true) : options.inverse(false);
     },
 
 };

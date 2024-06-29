@@ -53,7 +53,35 @@ class UserModel extends AbstractModel {
         const result = await this.prisma.user.findFirst({ 
             where:{userId:id},
             include: {
-                _count: true
+                _count: true,
+                service: {
+                    skip: 0,
+                    take: 100,
+                    select: {
+                        date: true,
+                        description: true,
+                        typeReferences: {
+                            select: {
+                                name: true,
+                            }
+                        },
+                        transaction: {
+                            select: {
+                                mount: true,
+                                type: true,
+                                methodPaymentReference: {
+                                    select: {
+                                        moneyReference: {
+                                            select: {
+                                                prefix: true
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
             }
         });
         this.DistroyPrisma();
