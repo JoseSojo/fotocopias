@@ -2,6 +2,7 @@ import { ReportBaseController } from './ReportController';
 import { Request, Response } from "express";
 import BaseController from "../BaseController";
 import UserModel from "../../models/user/UserModel";
+import { UserCompleted } from '../../types/user';
 
 export default class ReportUser extends ReportBaseController {
 
@@ -19,8 +20,6 @@ export default class ReportUser extends ReportBaseController {
             return res.redirect(`/users/list`);
         }
 
-        console.log(user);
-
         const dateNow = super.GenerateName();
         const path = `public/report/${dateNow}.pdf`
     
@@ -32,7 +31,6 @@ export default class ReportUser extends ReportBaseController {
                 <td></td>
             </tr>
         `
-
         let serviceBody = ``;
         user.service.forEach((item) => {
             serviceBody += `
@@ -91,4 +89,74 @@ export default class ReportUser extends ReportBaseController {
         }, 1000)
     }
 
+    public async ReportListUser(req: Request, res: Response) {
+        const user = req.user as UserCompleted;
+        let limit = 20;
+        let pag = 0;
+        let now = 0;
+
+        const dateNow = super.GenerateName();
+        const path = `public/report/${dateNow}.pdf`
+    
+        let bodyTable = ``;
+
+        const countUser = await UserModel.CountBy({ filter:{} }); 
+        
+        while (countUser > now) {
+            const listPromise = UserModel.GetUsers({ pag, limit });
+            pag++;
+            now += limit;
+
+            const list = await listPromise;
+            list.forEach((item) => {
+                bodyTable += `
+                    <tr>
+                        <td>${item.username}</td>
+                        <td>${item.name}</td>
+                        <td>${item.lastname}</td>
+                        <td>${item.rol}</td>
+                        <td>${item.email}</td>
+                    </tr>
+                `;
+            })
+        }
+
+        const tHead = `
+            <tr>
+                <td>username</td>
+                <td>name</td>
+                <td>lastname</td>
+                <td>rol</td>
+                <td>email</td>
+            </tr>
+        `;
+
+        const content = `
+            ${super.GetHeader()}
+
+            <div class="">
+                <h2 style="color:#212529">Libreria<h2>
+                <hr>
+                <h5 style="color:#414549">${dateNow}</h5>
+                <h6>Reporte de lista de usuarios<h6>
+                <span style="font-size:17px;color:#212529">Generado por: ${user.name} ${user.lastname} (${user.rol})<span>
+                <br>
+                <span style="font-size:17px;color:#212529">Fecha: ${dateNow}<span>
+
+                <br>
+                <hr>
+                <br>
+            </div>
+
+
+            ${super.GenerateTablePdf({ listTr:bodyTable, tHead, title:`Lista de usuarios` })}
+
+            ${super.GetFooter()}
+        `;
+
+        super.GeneratePDF({ content, pathPdf:path });
+        setTimeout(()=>{
+            return res.redirect(`/report/${dateNow}.pdf`);        
+        }, 1500)
+    }
 }

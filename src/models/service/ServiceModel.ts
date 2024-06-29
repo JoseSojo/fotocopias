@@ -47,13 +47,8 @@ class ServiceModel extends AbstractModel {
         const result = await this.prisma.serviceType.findMany({
             include: {
                 createReference: true,
-                stockExpenseReference: {
-                    include: { serviceType:{
-                        include: {
-                            stockExpenseReference: true
-                        }
-                    } }
-                },
+                stockExpenseReference: true,
+                _count: true
             },
             skip: pag*limit,
             take: limit
@@ -64,7 +59,10 @@ class ServiceModel extends AbstractModel {
 
     public async GetTypeById({id}:{id:string}) {
         this.StartPrisma();
-        const result = await this.prisma.serviceType.findFirst({ where:{serviceTypeId:id}, include:{createReference:true,stockExpenseReference: true} });
+        const result = await this.prisma.serviceType.findFirst({ where:{serviceTypeId:id}, 
+            include:{createReference:true,stockExpenseReference: true, _count:true
+
+            } });
         this.DistroyPrisma();
         return result;
     }
@@ -103,7 +101,12 @@ class ServiceModel extends AbstractModel {
             include: {
                 createReference: true,
                 equipmentReference: true,
-                transaction: true
+                transaction: {
+                    include: {
+                        methodPaymentReference: true,
+                    }
+                },
+                typeReferences: true,
             },
             skip:pag*limit,
             take:limit

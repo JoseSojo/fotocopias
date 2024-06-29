@@ -6,8 +6,9 @@
     <div class="row d-flex justify-content-between mb-2">
         <span></span>
         <div class="">
-            <a href="/stock" class="btn btn-primary">panel</a>
-            <a href="/stock/create" class="btn btn-primary">crear</a>
+            {{#validRoot user}}
+                <a href="/transaction/create" class="btn btn-primary">crear</a>
+            {{/validRoot}}
         </div>
     </div>
     <div class="row">
@@ -19,7 +20,10 @@
                             <th>Concepto</th>
                             <th>Monto</th>
                             <th>Tipo</th>
-                            <th class="text-center">acciones</th>
+                            {{#validRoot user}}
+                                <th class="text-center">acciones</th>
+                            {{/validRoot}}
+
                         </tr>
                     </thead>
                     <tbody>
@@ -28,11 +32,13 @@
                                 <td>{{this.concepto}}</td>
                                 <td>{{this.mount}}</td>
                                 <td>{{this.type}}</td>
+                                {{#validRoot ../user}}
                                 <td>
                                     <a href="/transaction/{{this.transactionId}}/show" class="btn py-0 btn-primary">
                                         <i class="bi bi-eye-fill lead"></i>
                                     </a>
                                 </td>
+                                {{/validRoot}}
                             </tr>
                         {{/each}}
                     </tbody>

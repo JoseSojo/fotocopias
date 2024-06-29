@@ -13,6 +13,7 @@ export interface UserCreate extends UserLogin {
 
 export interface UserCompleted extends UserCreate {
   userId: string,
+  rol: string,
 
   // paymentMethod     PaymentMethod[]
   // meney             Money[]

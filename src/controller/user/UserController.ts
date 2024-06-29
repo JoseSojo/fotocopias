@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import BaseController from "../BaseController";
 import UserModel from "../../models/user/UserModel";
+import StockModel from "../../models/stock/StockModel";
+import EquipmentModel from "../../models/equipment/EquipmentModel";
 import MethodModel from "../../models/method/MethodModel";
 import ServiceModel from "../../models/service/ServiceModel";
 import TransactionModel from "../../models/transacction/TransactionModel";
@@ -22,11 +24,15 @@ class UserController extends BaseController {
 
     public async DashboardController (req: Request, res: Response) {
         const date = new Date();
-        const pag = req.params.pag | 0;
-        const limit = req.params.limit | 10; 
+        const pag = req.query.pag | 0;
+        const limit = req.query.limit | 10; 
+
 
         const moneysPromise = MethodModel.GetAllMoney({ pag:0, limit:10 });
         const serviceCountPromise = ServiceModel.CountService({ filter:{} });
+        const userCountPromise = UserModel.CountBy({ filter:{} });
+        const methodCountPromise = MethodModel.CountMethodBy({ filter:{} });
+        const equipmentCountPromise = EquipmentModel.CountEquipmentBy({ filter:{} });
         const transactionsCountPromise = TransactionModel.CountAllTransactions({});
         const years = MethodModel.GetYears({});
         const month = date.getMonth()+1;
@@ -40,10 +46,15 @@ class UserController extends BaseController {
         const Params = {
             years: await years,
             moneys: await moneysPromise,
+
             servicesCount: await serviceCountPromise,
             transactionCount: transsactions.all,
             egresoCount: transsactions.egreso,
             ingresoCount: transsactions.ingreso,
+            userCount: await userCountPromise,
+            methodCount: await methodCountPromise,
+            equipmentCount: await equipmentCountPromise,
+
             ubication: `Resumen`,
 
             servicesToDay: await serviceToDay,
@@ -80,6 +91,37 @@ class UserController extends BaseController {
         });
     }
 
+    public async RenderReportController (req: Request, res: Response) {
+        const pag = req.query.pag | 0;
+        const limit = req.query.limit | 10; 
+
+        console.log(pag);
+
+        const reports = UserModel.GetReports({pag, limit});
+        const countPromise = UserModel.CountReport({ filter:{} });
+
+        const Params = {
+            list: await reports,
+            next: `/dashboard/report?pag=${pag+1}`,
+            previous: pag == 0 ? null : `/dashboard/report?pag=${pag-1}`,
+            count: await countPromise,
+
+            nowTotal: ``,
+            requirePagination: false,
+            nowPath: pag,
+            nowPathOne: pag!=0 ? true : false,
+            nowPathEnd: false,
+        }
+
+        Params.nowTotal = `${Params.list.length+(pag*10)} / ${Params.count}`;
+        Params.nowPathEnd = (Params.list.length-9)>0 ? true : false;
+        
+        console.log(Params.next, Params.previous);
+        Params.requirePagination = Params.count > 10 ? true : false;
+
+        return res.render(`s/report.hbs`, Params); 
+    }
+
     // render dashboard
     public async RenderDashboard(req: Request, res: Response) {
 
@@ -94,8 +136,8 @@ class UserController extends BaseController {
 
     // render list
     public async RenderList(req: Request, res: Response) {
-        const pag = req.params.pag | 0;
-        const limit = req.params.limit | 10; 
+        const pag = req.query.pag | 0;
+        const limit = req.query.limit | 10; 
 
         const users = UserModel.GetUsers({pag, limit});
         const countPromise = UserModel.CountBy({ filter:{} });

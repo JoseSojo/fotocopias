@@ -1,0 +1,65 @@
+<link href="/assets/css/tables/table-basic.css" rel="stylesheet" type="text/css" />
+<link href="/assets/css/dashboard/dash_2.css" rel="stylesheet" type="text/css" />
+<link href="/assets/css/elements/custom-pagination.css" rel="stylesheet" type="text/css" />
+
+<div class="container">
+    <div class="row d-flex justify-content-between mb-2">
+        <span></span>
+        <div class="">
+            <a href="/dashboard" class="btn btn-primary">panel</a>
+            {{!-- {{#validRoot user}}
+                <a href="/report/list/user" target="_blank" class="btn btn-danger">
+                    <div class="bi bi-filetype-pdf"></div>
+                </a>
+            {{/validRoot}} --}}
+        </div>
+    </div>
+    <div class="row">
+        {{#if list}}
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped mb-4">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Objecto reporte</th>
+                            <th>Creador</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each list}}
+                            <tr>
+                                <th class="">{{this.fecha}}</th>
+                                <th class="">{{this.objectType}}</th>
+                                <th class="">{{this.createReference.name}} {{this.createReference.lastname}}</th>
+                                <td>
+                                    <a href="{{this.downloader}}" target="_blank" class="btn btn-danger">
+                                        <i class="bi bi-filetype-pdf"></i>
+                                        Descargar reporte
+                                    </a>
+                                </td>
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-6">
+                <span class="h6">{{nowTotal}}</span>
+            </div>
+
+            <div class="paginating-container pagination-default col-6">
+                <ul class="pagination">
+                    {{#if nowPathOne}}
+                        <li class="prev"><a href="{{previous}}">anterior</a></li>
+                    {{/if}}
+                        <li class=""><span class="px-5">pagina actual {{nowPath}}</span></li>
+                    {{#if nowPathEnd}}
+                        <li class="next"><a href="{{next}}">siguiente</a></li>
+                    {{/if}}
+                </ul>
+            </div>
+        {{else}}
+            <p class="text-muted lead">No hay reportes</p>
+        {{/if}}
+    </div>
+</div>

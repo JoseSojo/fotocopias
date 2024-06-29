@@ -41,6 +41,12 @@ class StockModel extends AbstractModel {
             where:{delete_at:null}, 
             skip:pag*limit, 
             take:limit,
+            include: {
+                _count: true,
+                transaction: true,
+                serviceType: true,
+                updateReference: true
+            }
         });
         this.DistroyPrisma();
         return result;
@@ -58,7 +64,12 @@ class StockModel extends AbstractModel {
         this.StartPrisma();
         const result = await this.prisma.stock.findFirst({ 
             where:{stockId:id}, 
-            include:{transaction:true,updateReference:true,moneyReference:true,serviceType:true}, 
+            include:{
+                transaction:true,
+                updateReference:true,
+                moneyReference:true,
+                serviceType:true
+            }, 
         });
         if(result == null) return null;
         this.DistroyPrisma();

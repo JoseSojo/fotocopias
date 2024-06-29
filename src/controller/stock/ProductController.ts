@@ -58,8 +58,8 @@ class StockController extends BaseController {
 
     // list stock
     public async RenderListStock(req: Request, res: Response) {
-        const pag = req.params.pag | 0;
-        const limit = req.params.limit | 10; 
+        const pag = req.query.pag | 0;
+        const limit = req.query.limit | 10; 
 
         const money = StockModel.GetAllStock({pag, limit});
         const countPromise = StockModel.CountStockBy({ filter:{} });

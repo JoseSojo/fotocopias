@@ -36,6 +36,7 @@ model User {
   serviceType       ServiceType[]
   service           Service[]
   equiment          Equipment[]
+  reports           Report[]
 
   create_at DateTime  @default(now())
   update_at DateTime  @default(now()) @updatedAt
@@ -206,3 +207,20 @@ model StaticticsForYear {
   noviembre                   Int     @default(0)
   diciembre                   Int     @default(0)
 }
+
+model Report {
+  reportId                String      @id @default(uuid())
+
+  objectType              String
+  fecha                   String
+  path                    String
+  downloader              String
+
+  createBy                String
+  createReference         User?        @relation(fields: [createBy], references: [userId])
+
+  create_at               DateTime    @default(now())
+  update_at               DateTime    @default(now()) @updatedAt
+  delete_at               DateTime?
+}
+

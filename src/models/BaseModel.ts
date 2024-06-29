@@ -1,6 +1,7 @@
 import { TransactionCreate } from '../types/transaction.d'; 
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
+import { ReportCreate } from '../types/report.d';
 
 class AbstractModel {
 
@@ -106,6 +107,41 @@ class AbstractModel {
         this.DistroyPrisma();
         return result;
     }
+
+    async CreateReport({ data }: { data:ReportCreate }) {
+        this.StartPrisma();
+        const result = await this.prisma.report.create({ data });
+        console.log(result);
+        this.DistroyPrisma();
+        return result;
+    }
+
+    async GetReports({ pag, limit }: { pag:number,limit:number }) {
+        this.StartPrisma();
+        const result = await this.prisma.report.findMany({
+            skip: pag*limit,
+            take: limit,
+            include: {
+                createReference: true,
+            },
+            orderBy: {
+                create_at: 'asc'
+            },
+            where: {
+                delete_at: undefined
+            }
+        });
+        this.DistroyPrisma();
+        return result;
+    }
+
+    async CountReport({ filter }: { filter:any }) {
+        this.StartPrisma();
+        const result = await this.prisma.report.count({ where: filter });
+        this.DistroyPrisma();
+        return result;
+    }
+
 }
 
 export default AbstractModel;

@@ -14,6 +14,12 @@
                     <p class="col-12">Última actualización: <b>{{#formatDate data.update_at}} {{this}} {{/formatDate}}</b></p>
                 </div>
 
+                {{#validRoot user}}
+                    <div class="row mt-3">
+                        <a href="/report/equipmet/{{../data.equipmentId}}" target="_blank" class="btn btn-danger bi bi-filetype-pdf"> Reporte</a>
+                    </div>
+                {{/validRoot}}
+
             </div>
         </div>
 

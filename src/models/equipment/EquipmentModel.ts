@@ -18,7 +18,27 @@ class MethodModel extends AbstractModel {
 
     public async GetEquipmentById({id}:{id:string}) {
         this.StartPrisma();
-        const result = await this.prisma.equipment.findFirst({where:{equipmentId:id}, include: { servicesId: true, createReference: true }});
+        const result = await this.prisma.equipment.findFirst({where:{equipmentId:id}, include: { 
+            servicesId: {
+                include: {
+                    typeReferences: true,
+                    transaction: {
+                        include: {
+                            methodPaymentReference: {
+                                select: {
+                                    moneyReference: {
+                                        select: {
+                                            prefix: true
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+            },
+            createReference: true
+        }});
         this.DistroyPrisma();
         return result;
     }
@@ -28,7 +48,11 @@ class MethodModel extends AbstractModel {
         const result = await this.prisma.equipment.findMany({
             skip:pag*limit,
             take:limit,
-            include: { servicesId: true, createReference: true}
+            include: {
+                _count: true,
+                servicesId: true, 
+                createReference: true
+            }
         });
         this.DistroyPrisma();
         return result;

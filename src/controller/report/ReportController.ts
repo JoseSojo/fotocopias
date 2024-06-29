@@ -76,7 +76,7 @@ export class ReportBaseController {
      */
     public GenerateName(): string {
         const date = new Date();
-        return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}_${date.getHours()}:${date.getMinutes()}`;
+        return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}_${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}:${date.getMilliseconds()}`;
     }
 
     /**
@@ -96,6 +96,20 @@ export class ReportBaseController {
                 <thead>${tHead}</thead>
                 <tbody>${listTr}</tbody>
             </table>
+        `;
+    }
+
+    public GenerateListUnorder({ title, listUl }: {title:string, listUl:{name:string, value:string|number}[]}) {
+        let body = ``;
+        listUl.forEach((item) => {
+            body += `
+                <li><span style="font-size:16px">${item.name}</span>: <b>${item.value}</b></li>
+            `;
+        })
+
+        return `
+            <h5 style="margin-top: 2em">${title}</h5>
+            <ul>${body}</ul>
         `;
     }
 

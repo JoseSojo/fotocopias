@@ -8,6 +8,9 @@
         <div class="">
             <a href="/service" class="btn btn-primary">panel</a>
             <a href="/service/create" class="btn btn-primary">crear</a>
+            {{#validRoot user}}
+                <a href="/report/list/service" target="_blank" class="btn btn-danger bi bi-filetype-pdf"> Reporte</a>
+            {{/validRoot}}
         </div>
     </div>
     <div class="row">
@@ -18,7 +21,10 @@
                         <tr>
                             <th>Fecha</th>
                             <th>Descripción</th>
-                            <th class="text-center">acciones</th>
+                            {{#validRoot user}}
+                                <th class="text-center">acciones</th>
+                            {{/validRoot}}
+
                         </tr>
                     </thead>
                     <tbody>
@@ -26,11 +32,14 @@
                             <tr>
                                 <td>{{this.date}}</td>
                                 <td>{{this.description}}</td>
+                                {{#validRoot ../user}}
                                 <td>
-                                    <a href="/service/{{this.serviceId}}/show" class="btn py-0 btn-primary">
+                                    <a href="/service/{{../this.serviceId}}/show" class="btn py-0 btn-primary">
                                         <i class="bi bi-eye-fill lead"></i>
                                     </a>
                                 </td>
+                                {{/validRoot }}
+
                             </tr>
                         {{/each}}
                     </tbody>
@@ -43,11 +52,11 @@
             <div class="paginating-container pagination-default col-6">
                 <ul class="pagination">
                     {{#if nowPathOne}}
-                        <li class="prev"><a href="{{previousPath}}">anterior</a></li>
+                        <li class="prev"><a href="{{previous}}">anterior</a></li>
                     {{/if}}
                         <li class=""><span class="px-5">pagina actual {{nowPath}}</span></li>
                     {{#if nowPathEnd}}
-                        <li class="next"><a href="{{nextPath}}">siguiente</a></li>
+                        <li class="next"><a href="{{next}}">siguiente</a></li>
                     {{/if}}
                 </ul>
             </div>

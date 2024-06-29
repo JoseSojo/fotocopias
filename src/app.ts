@@ -22,6 +22,12 @@ import UserReport from './controller/report/UserReport';
 import TransactionController from './controller/transaction/Transaction';
  
 import cron from "node-cron";
+import ReportEquitment from './controller/report/EquitmentReport';
+import ReportStock from './controller/report/StockReport';
+import ReportMoney from './controller/report/MoneyReport';
+import ReportMethod from './controller/report/MethodReport';
+import ReportTypeService from './controller/report/ServiceTypeReport';
+import ReportService from './controller/report/ServiceReport';
 
 // start
 class App {
@@ -99,6 +105,7 @@ class App {
         const user = new UserController();
         this.app.get(`/dashboard`, OnSession , user.DashboardController);
         this.app.get(`/statictics`, OnSession , user.StaticticsController);
+        this.app.get(`/dashboard/report`, OnSession , user.RenderReportController);
 
         // users
         this.app.get(`/users`, OnSession , user.RenderDashboard);
@@ -195,6 +202,31 @@ class App {
         // report
         const userReport = new UserReport();
         this.app.get(`/report/user/:id`, userReport.ReportUniqueUser);
+        this.app.get(`/report/list/user`, userReport.ReportListUser);
+
+        const reportEquitment = new ReportEquitment();
+        this.app.get(`/report/equipmet/:id`, reportEquitment.ReportUniqueEquitment);
+        this.app.get(`/report/list/equipment`, reportEquitment.ReportListEquipment);
+
+        const reportStock = new ReportStock();
+        this.app.get(`/report/stock/:id`, reportStock.ReportUniqueStock);
+        this.app.get(`/report/list/stock`, reportStock.ReportListStock);
+
+        const reportMoney = new ReportMoney();
+        this.app.get(`/report/money/:id`, reportMoney.ReportUniqueMoney);
+        this.app.get(`/report/list/money`, reportMoney.ReportListMoney);
+
+        const reportMethod = new ReportMethod();
+        this.app.get(`/report/method/:id`, reportMethod.ReportUniqueMethod);
+        this.app.get(`/report/list/method`, reportMethod.ReportListMethod);
+    
+        const reportType = new ReportTypeService();
+        this.app.get(`/report/type/:id`, reportType.ReportUniqueService);
+        this.app.get(`/report/list/type`, reportType.ReportListService);
+
+        const reportService = new ReportService();
+        this.app.get(`/report/service/:id`, reportService.ReportUniqueService);
+        this.app.get(`/report/list/service`, reportService.ReportListService);
     }
 
     public Run () {

@@ -24,8 +24,8 @@ class MethodController extends BaseController {
     }
 
     public async RenderListEquipment(req: Request, res: Response) {
-        const pag = req.params.pag | 0;
-        const limit = req.params.limit | 10; 
+        const pag = req.query.pag | 0;
+        const limit = req.query.limit | 10; 
 
         const money = EquipmentModel.GetAllEquipment({pag, limit});
         const countPromise = EquipmentModel.CountEquipmentBy({ filter:{} });
