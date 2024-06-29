@@ -1,12 +1,4 @@
 node_modules
-dist/config
-dist/controller
-dist/middlewares
-dist/test
-dist/models
-dist/utils
-dist/app.js
-dist/indexRoute.js
-dist/TestModels.js
+
 
 
