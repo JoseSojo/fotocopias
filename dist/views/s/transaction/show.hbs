@@ -1,0 +1,53 @@
+<link href="/assets/css/users/user-profile.css" rel="stylesheet" type="text/css" />
+
+<div class="container">
+    <div class="row">
+        <div class="card col-lg-8 col-sm-12 m-auto layout-top-spacing">
+            <div class="card-body">
+                <h4>{{data.service.date}}</h4>
+                <p class="text-muted">monto: <b>{{data.mount}} {{data.methodPaymentReference.moneyReference.prefix}}</b></p>
+                <p class="text-muted">concepto: <b>{{data.concepto}}</b></p>
+                <p class="text-muted">tipo: <b>{{data.type}}</b></p>
+
+                <div class="container row mt-4">
+                    <div class="col-12 col-md-6">
+                        <h5>Creado por:</h5>
+                        <p>
+                            <span>usuario</span> <b>{{data.createReference.username}}</b>
+                        </p>
+                        <p>
+                            <span>correo</span> <b>{{data.createReference.email}}</b>
+                        </p>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <h5>Método de pago:</h5>
+                        <p>
+                            <span>Nombre:</span> <b>{{data.methodPaymentReference.title}}</b>
+                        </p>
+                        <p>
+                            <span>Moneda</span> <b>{{data.methodPaymentReference.moneyReference.title}}</b>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="container row mt-4">
+                    <div class="col-12 col-md-6">
+                        <h5>Servicio:</h5>
+                        <p>
+                            <b>{{data.service.description}}</b>
+                        </p>
+                    </div>
+                   <div class="col-12 col-md-6">
+                     <h5>Fechas</h5>
+                        <span class="">Creado el (fecha del sistema):</span><br>
+                        <b>
+                            {{#formatDate data.create_at}}
+                                {{this}}
+                            {{/formatDate}}
+                        </b>
+                   </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

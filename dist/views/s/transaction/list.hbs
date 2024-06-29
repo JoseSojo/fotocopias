@@ -6,41 +6,33 @@
     <div class="row d-flex justify-content-between mb-2">
         <span></span>
         <div class="">
-            <a href="/users" class="btn btn-primary">panel</a>
-            <a href="/user/create" class="btn btn-primary">crear</a>
+            <a href="/stock" class="btn btn-primary">panel</a>
+            <a href="/stock/create" class="btn btn-primary">crear</a>
         </div>
     </div>
     <div class="row">
         {{#if list}}
             <div class="table-responsive">
-                <table class="table table-bordered table-striped mb-4">
+                <table class="table table-bordered table-hover table-striped table-sm mb-4">
                     <thead>
                         <tr>
-                            <th>Nombre</th>
-                            <th>Usuario</th>
-                            <th>Creado el</th>
-                            {{#validRoot user}}
-                                <th class="text-center">acciones</th>
-                            {{/validRoot}}
+                            <th>Concepto</th>
+                            <th>Monto</th>
+                            <th>Tipo</th>
+                            <th class="text-center">acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         {{#each list}}
                             <tr>
-                                <td>{{this.name}} {{this.lastname}}</td>
-                                <td>{{this.username}}</td>
+                                <td>{{this.concepto}}</td>
+                                <td>{{this.mount}}</td>
+                                <td>{{this.type}}</td>
                                 <td>
-                                    {{#formatDate this.create_at}}
-                                        {{this}}
-                                    {{/formatDate}}
+                                    <a href="/transaction/{{this.transactionId}}/show" class="btn py-0 btn-primary">
+                                        <i class="bi bi-eye-fill lead"></i>
+                                    </a>
                                 </td>
-                                {{#validRoot ../user}}
-                                    <td>
-                                        <a href="/user/{{../this.userId}}/show" class="btn py-0 btn-primary">
-                                            <i class="bi bi-eye-fill lead"></i>
-                                        </a>
-                                    </td>
-                                {{/validRoot}}
                             </tr>
                         {{/each}}
                     </tbody>
@@ -53,11 +45,11 @@
             <div class="paginating-container pagination-default col-6">
                 <ul class="pagination">
                     {{#if nowPathOne}}
-                        <li class="prev"><a href="{{previousPath}}">anterior</a></li>
+                        <li class="prev"><a href="{{previous}}">anterior</a></li>
                     {{/if}}
                         <li class=""><span class="px-5">pagina actual {{nowPath}}</span></li>
                     {{#if nowPathEnd}}
-                        <li class="next"><a href="{{nextPath}}">siguiente</a></li>
+                        <li class="next"><a href="{{next}}">siguiente</a></li>
                     {{/if}}
                 </ul>
             </div>

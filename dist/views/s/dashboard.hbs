@@ -3,7 +3,6 @@
 
 <div class="container">
     <div class="row layout-top-spacing">
-
         {{#each moneys}}
             <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12 layout-spacing">
                 <div class="widget widget-account-invoice-one">
@@ -45,10 +44,10 @@
                                 </div>
                             </div> --}}
 
-                            <div class="inv-action">
+                            {{!-- <div class="inv-action">
                                 <a href="/" class="btn btn-dark">Ver movimientos</a>
-                                {{!-- <a href="" class="btn btn-danger">Ver movimientos</a> --}}
-                            </div>
+                                <a href="" class="btn btn-danger">Ver movimientos</a>
+                            </div> --}}
                         </div>
                     </div>
 
@@ -67,27 +66,78 @@
                         
                             <div class="inv-detail">                                        
                                 <div class="info-detail-1">
-                                    <p>total</p>
+                                    <a href="/transaction/list">total</a>
                                     <p>{{transactionCount}}</p>
                                 </div>
                                 <div class="info-detail-2">
-                                    <p>ingreso</p>
+                                    <a href="/transaction/list?type=INGRESO">ingreso</a>
                                     <p>{{ingresoCount}}</p>
                                 </div>
                                 <div class="info-detail-2">
-                                    <p>egreso</p>
+                                    <a href="/transaction/list?type=EGRESO">egreso</a>
                                     <p>{{egresoCount}}</p>
                                 </div>
                             </div>
 
                             <div class="inv-action">
-                                <a href="/" class="btn btn-dark">Ver transacciones</a>
+                                <a href="/transaction/list" class="btn btn-dark">Ver transacciones</a>
                             </div>
                         </div>
                     </div>
 
                 </div>
+        </div>
+    </div>
+    <div class="row layout-top-spacing">
+        <div class="d-flex justify-content-between col-12">
+            <span class="lead text-muted">fecha de hoy: {{toDay}}</span>
+            <a href="/service/create" class="btn btn-primary">crear</a>
+        </div>
+        {{#if servicesToDay}}
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped mb-4">
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Monto</th>
+                            <th>Descripción</th>
+                            <th class="text-center">acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each servicesToDay}}
+                            <tr>
+                                <td>{{this.transaction.type}}</td>
+                                <td>{{this.transaction.mount}} <b>{{this.transaction.methodPaymentReference.moneyReference.prefix}}</b></td>
+                                <td>{{this.description}}</td>
+                                <td>
+                                    <a href="/service/{{this.serviceId}}/show" class="btn py-0 btn-primary">
+                                        <i class="bi bi-eye-fill lead"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
             </div>
+            <div class="col-6">
+                <span class="h6">{{nowTotal}}</span>
+            </div>
+
+            <div class="paginating-container pagination-default col-6">
+                <ul class="pagination">
+                    {{#if nowPathOne}}
+                        <li class="prev"><a href="{{previousPath}}">anterior</a></li>
+                    {{/if}}
+                        <li class=""><span class="px-5">pagina actual {{nowPath}}</span></li>
+                    {{#if nowPathEnd}}
+                        <li class="next"><a href="{{nextPath}}">siguiente</a></li>
+                    {{/if}}
+                </ul>
+            </div>
+        {{else}}
+            <p class="text-muted lead">No hay servicios hoy</p>
+        {{/if}}
     </div>
 
 </div>
