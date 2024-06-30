@@ -1,4 +1,5 @@
+prisma/data.db
+prisma/data.db-journal
+
 node_modules
-
-
-
+public/report
