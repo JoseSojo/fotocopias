@@ -64,8 +64,8 @@ class StockController extends BaseController_1.default {
     // list stock
     RenderListStock(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const pag = req.params.pag | 0;
-            const limit = req.params.limit | 10;
+            const pag = req.query.pag | 0;
+            const limit = req.query.limit | 10;
             const money = StockModel_1.default.GetAllStock({ pag, limit });
             const countPromise = StockModel_1.default.CountStockBy({ filter: {} });
             const Params = {

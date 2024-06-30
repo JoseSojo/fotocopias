@@ -29,7 +29,27 @@ class MethodModel extends BaseModel_1.default {
     GetEquipmentById(_a) {
         return __awaiter(this, arguments, void 0, function* ({ id }) {
             this.StartPrisma();
-            const result = yield this.prisma.equipment.findFirst({ where: { equipmentId: id }, include: { servicesId: true, createReference: true } });
+            const result = yield this.prisma.equipment.findFirst({ where: { equipmentId: id }, include: {
+                    servicesId: {
+                        include: {
+                            typeReferences: true,
+                            transaction: {
+                                include: {
+                                    methodPaymentReference: {
+                                        select: {
+                                            moneyReference: {
+                                                select: {
+                                                    prefix: true
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    createReference: true
+                } });
             this.DistroyPrisma();
             return result;
         });
@@ -40,7 +60,11 @@ class MethodModel extends BaseModel_1.default {
             const result = yield this.prisma.equipment.findMany({
                 skip: pag * limit,
                 take: limit,
-                include: { servicesId: true, createReference: true }
+                include: {
+                    _count: true,
+                    servicesId: true,
+                    createReference: true
+                }
             });
             this.DistroyPrisma();
             return result;

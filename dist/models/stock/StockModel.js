@@ -53,6 +53,12 @@ class StockModel extends BaseModel_1.default {
                 where: { delete_at: null },
                 skip: pag * limit,
                 take: limit,
+                include: {
+                    _count: true,
+                    transaction: true,
+                    serviceType: true,
+                    updateReference: true
+                }
             });
             this.DistroyPrisma();
             return result;
@@ -72,7 +78,12 @@ class StockModel extends BaseModel_1.default {
             this.StartPrisma();
             const result = yield this.prisma.stock.findFirst({
                 where: { stockId: id },
-                include: { transaction: true, updateReference: true, moneyReference: true, serviceType: true },
+                include: {
+                    transaction: true,
+                    updateReference: true,
+                    moneyReference: true,
+                    serviceType: true
+                },
             });
             if (result == null)
                 return null;

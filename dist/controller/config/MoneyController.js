@@ -33,8 +33,8 @@ class ConfigController extends BaseController_1.default {
     // render list
     RenderMoneyList(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const pag = req.params.pag | 0;
-            const limit = req.params.limit | 10;
+            const pag = req.query.pag | 0;
+            const limit = req.query.limit | 10;
             const money = MethodModel_1.default.GetAllMoney({ pag, limit });
             const countPromise = MethodModel_1.default.CountMoneyBy({ filter: {} });
             const Params = {
@@ -77,8 +77,8 @@ class ConfigController extends BaseController_1.default {
     // render list method
     RenderMethodList(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const pag = req.params.pag | 0;
-            const limit = req.params.limit | 10;
+            const pag = req.query.pag | 0;
+            const limit = req.query.limit | 10;
             const method = MethodModel_1.default.GetAllMethodPayment({ pag, limit });
             const countPromise = MethodModel_1.default.CountMethodBy({ filter: {} });
             const Params = {

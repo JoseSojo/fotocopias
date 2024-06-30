@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const BaseController_1 = __importDefault(require("../BaseController"));
 const UserModel_1 = __importDefault(require("../../models/user/UserModel"));
+const EquipmentModel_1 = __importDefault(require("../../models/equipment/EquipmentModel"));
 const MethodModel_1 = __importDefault(require("../../models/method/MethodModel"));
 const ServiceModel_1 = __importDefault(require("../../models/service/ServiceModel"));
 const TransactionModel_1 = __importDefault(require("../../models/transacction/TransactionModel"));
@@ -31,10 +32,13 @@ class UserController extends BaseController_1.default {
     DashboardController(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const date = new Date();
-            const pag = req.params.pag | 0;
-            const limit = req.params.limit | 10;
+            const pag = req.query.pag | 0;
+            const limit = req.query.limit | 10;
             const moneysPromise = MethodModel_1.default.GetAllMoney({ pag: 0, limit: 10 });
             const serviceCountPromise = ServiceModel_1.default.CountService({ filter: {} });
+            const userCountPromise = UserModel_1.default.CountBy({ filter: {} });
+            const methodCountPromise = MethodModel_1.default.CountMethodBy({ filter: {} });
+            const equipmentCountPromise = EquipmentModel_1.default.CountEquipmentBy({ filter: {} });
             const transactionsCountPromise = TransactionModel_1.default.CountAllTransactions({});
             const years = MethodModel_1.default.GetYears({});
             const month = date.getMonth() + 1;
@@ -49,6 +53,9 @@ class UserController extends BaseController_1.default {
                 transactionCount: transsactions.all,
                 egresoCount: transsactions.egreso,
                 ingresoCount: transsactions.ingreso,
+                userCount: yield userCountPromise,
+                methodCount: yield methodCountPromise,
+                equipmentCount: yield equipmentCountPromise,
                 ubication: `Resumen`,
                 servicesToDay: yield serviceToDay,
                 next: `/users/list?pag=${pag + 1}`,
@@ -80,6 +87,31 @@ class UserController extends BaseController_1.default {
             });
         });
     }
+    RenderReportController(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const pag = req.query.pag | 0;
+            const limit = req.query.limit | 10;
+            console.log(pag);
+            const reports = UserModel_1.default.GetReports({ pag, limit });
+            const countPromise = UserModel_1.default.CountReport({ filter: {} });
+            const Params = {
+                list: yield reports,
+                next: `/dashboard/report?pag=${pag + 1}`,
+                previous: pag == 0 ? null : `/dashboard/report?pag=${pag - 1}`,
+                count: yield countPromise,
+                nowTotal: ``,
+                requirePagination: false,
+                nowPath: pag,
+                nowPathOne: pag != 0 ? true : false,
+                nowPathEnd: false,
+            };
+            Params.nowTotal = `${Params.list.length + (pag * 10)} / ${Params.count}`;
+            Params.nowPathEnd = (Params.list.length - 9) > 0 ? true : false;
+            console.log(Params.next, Params.previous);
+            Params.requirePagination = Params.count > 10 ? true : false;
+            return res.render(`s/report.hbs`, Params);
+        });
+    }
     // render dashboard
     RenderDashboard(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -93,8 +125,8 @@ class UserController extends BaseController_1.default {
     // render list
     RenderList(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const pag = req.params.pag | 0;
-            const limit = req.params.limit | 10;
+            const pag = req.query.pag | 0;
+            const limit = req.query.limit | 10;
             const users = UserModel_1.default.GetUsers({ pag, limit });
             const countPromise = UserModel_1.default.CountBy({ filter: {} });
             const Params = {

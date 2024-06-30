@@ -59,13 +59,8 @@ class ServiceModel extends BaseModel_1.default {
             const result = yield this.prisma.serviceType.findMany({
                 include: {
                     createReference: true,
-                    stockExpenseReference: {
-                        include: { serviceType: {
-                                include: {
-                                    stockExpenseReference: true
-                                }
-                            } }
-                    },
+                    stockExpenseReference: true,
+                    _count: true
                 },
                 skip: pag * limit,
                 take: limit
@@ -77,7 +72,9 @@ class ServiceModel extends BaseModel_1.default {
     GetTypeById(_a) {
         return __awaiter(this, arguments, void 0, function* ({ id }) {
             this.StartPrisma();
-            const result = yield this.prisma.serviceType.findFirst({ where: { serviceTypeId: id }, include: { createReference: true, stockExpenseReference: true } });
+            const result = yield this.prisma.serviceType.findFirst({ where: { serviceTypeId: id },
+                include: { createReference: true, stockExpenseReference: true, _count: true
+                } });
             this.DistroyPrisma();
             return result;
         });
@@ -121,7 +118,12 @@ class ServiceModel extends BaseModel_1.default {
                 include: {
                     createReference: true,
                     equipmentReference: true,
-                    transaction: true
+                    transaction: {
+                        include: {
+                            methodPaymentReference: true,
+                        }
+                    },
+                    typeReferences: true,
                 },
                 skip: pag * limit,
                 take: limit

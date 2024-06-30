@@ -36,8 +36,8 @@ class MethodController extends BaseController_1.default {
     }
     RenderListEquipment(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const pag = req.params.pag | 0;
-            const limit = req.params.limit | 10;
+            const pag = req.query.pag | 0;
+            const limit = req.query.limit | 10;
             const money = EquipmentModel_1.default.GetAllEquipment({ pag, limit });
             const countPromise = EquipmentModel_1.default.CountEquipmentBy({ filter: {} });
             const Params = {

@@ -30,8 +30,8 @@ class ServiceTypeController extends BaseController_1.default {
     }
     RenderList(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const pag = req.params.pag | 0;
-            const limit = req.params.limit | 10;
+            const pag = req.query.pag | 0;
+            const limit = req.query.limit | 10;
             const types = ServiceModel_1.default.GetAllTypes({ pag, limit });
             const typesCount = ServiceModel_1.default.CountTypesBy({ filter: {} });
             const Params = {

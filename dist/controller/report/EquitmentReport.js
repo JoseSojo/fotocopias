@@ -13,12 +13,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const ReportController_1 = require("./ReportController");
-const UserModel_1 = __importDefault(require("../../models/user/UserModel"));
-class ReportUser extends ReportController_1.ReportBaseController {
+const EquipmentModel_1 = __importDefault(require("../../models/equipment/EquipmentModel"));
+class ReportEquitment extends ReportController_1.ReportBaseController {
     constructor() {
         super();
     }
-    ReportUniqueUser(req, res) {
+    ReportUniqueEquitment(req, res) {
         const _super = Object.create(null, {
             GenerateName: { get: () => super.GenerateName },
             GetHeader: { get: () => super.GetHeader },
@@ -28,48 +28,30 @@ class ReportUser extends ReportController_1.ReportBaseController {
         });
         return __awaiter(this, void 0, void 0, function* () {
             const id = req.params.id;
-            const user = yield UserModel_1.default.FindUserById({ id });
-            if (!user) {
-                req.flash(`err`, `No se ubicó el usuario`);
+            const equitment = yield EquipmentModel_1.default.GetEquipmentById({ id });
+            const user = req.user;
+            if (!equitment) {
+                req.flash(`err`, `No se ubicó el equitment`);
                 return res.redirect(`/users/list`);
             }
             const dateNow = _super.GenerateName.call(this);
             const path = `public/report/${dateNow}.pdf`;
+            const downloader = `/report/${dateNow}.pdf`;
             const serviceHead = `
             <tr>
                 <td>Fecha</td>
-                <td>Descripción</td>
-                <td>Tipo de servicio</td>
-                <td></td>
+                <td>Servicio</td>
+                <td>Mount</td>
             </tr>
         `;
             let serviceBody = ``;
-            user.service.forEach((item) => {
+            equitment.servicesId.forEach((item) => {
                 serviceBody += `
                 <tr style="border-bottom:1px solid #212529">
                     <td>${item.date}</td>
-                    <td>${item.description}</td>
                     <td>${item.typeReferences.name}</td>
-                    <td>${item.transaction.type} ${item.transaction.mount} ${item.transaction.methodPaymentReference.moneyReference.prefix}</td>
+                    <td>${item.transaction.mount} ${item.transaction.methodPaymentReference.moneyReference.prefix}</td>
                 </tr>
-            `;
-            });
-            const DataCount = [
-                { title: `Metodos de pago`, count: user._count.paymentMethod },
-                { title: `Monedas`, count: user._count.meney },
-                { title: `Inventario`, count: user._count.stock },
-                { title: `Transacciones`, count: user._count.transaction },
-                { title: `Tipos de servicios`, count: user._count.serviceType },
-                { title: `Servicios`, count: user._count.service },
-                { title: `Equipo`, count: user._count.equiment }
-            ];
-            let ListCount = ``;
-            DataCount.forEach((item) => {
-                ListCount += `
-                <li>
-                    <span>${item.title}</span>:
-                    <span>${item.count}</span>
-                </li>
             `;
             });
             const content = `
@@ -77,14 +59,10 @@ class ReportUser extends ReportController_1.ReportBaseController {
             <div class="">
                 <h2 style="color:#212529">Libreria<h2>
                 <h5 style="color:#414549">${dateNow}</h5>
-                <h6>Reporte de usuario<h6>
-                <h6>${user.name} ${user.lastname}<h6>
-                <h6>${user.email}<h6>
-                <h6>(${user.rol})<h6>
-            </div>
-
-            <div style="margin:1.5em 0">
-                ${ListCount}
+                <h6>Reporte de equipo<h6>
+                <h6>${equitment.name}<h6>
+                <p>${equitment.description}<p>
+                <h6>Creado por: ${equitment.createReference.name} ${equitment.createReference.lastname} (${equitment.createReference.rol})<h6>
             </div>
 
             <div>
@@ -92,13 +70,20 @@ class ReportUser extends ReportController_1.ReportBaseController {
             </div>
             ${_super.GetFooter.call(this)}
         `;
+            EquipmentModel_1.default.CreateReport({ data: {
+                    createBy: user.userId,
+                    downloader,
+                    path,
+                    fecha: dateNow,
+                    objectType: `equipo/equipment`,
+                } });
             yield _super.GeneratePDF.call(this, { content, pathPdf: path });
             setTimeout(() => {
                 return res.redirect(`/report/${dateNow}.pdf`);
             }, 1000);
         });
     }
-    ReportListUser(req, res) {
+    ReportListEquipment(req, res) {
         const _super = Object.create(null, {
             GenerateName: { get: () => super.GenerateName },
             GetHeader: { get: () => super.GetHeader },
@@ -113,32 +98,29 @@ class ReportUser extends ReportController_1.ReportBaseController {
             let now = 0;
             const dateNow = _super.GenerateName.call(this);
             const path = `public/report/${dateNow}.pdf`;
+            const downloader = `/report/${dateNow}.pdf`;
             let bodyTable = ``;
-            const countUser = yield UserModel_1.default.CountBy({ filter: {} });
+            const countUser = yield EquipmentModel_1.default.CountEquipmentBy({ filter: {} });
             while (countUser > now) {
-                const listPromise = UserModel_1.default.GetUsers({ pag, limit });
+                const listPromise = EquipmentModel_1.default.GetAllEquipment({ pag, limit });
                 pag++;
                 now += limit;
                 const list = yield listPromise;
                 list.forEach((item) => {
                     bodyTable += `
                     <tr>
-                        <td>${item.username}</td>
                         <td>${item.name}</td>
-                        <td>${item.lastname}</td>
-                        <td>${item.rol}</td>
-                        <td>${item.email}</td>
+                        <td>${item.createReference.name} ${item.createReference.lastname}</td>
+                        <td>${item._count.servicesId}</td>
                     </tr>
                 `;
                 });
             }
             const tHead = `
             <tr>
-                <td>username</td>
-                <td>name</td>
-                <td>lastname</td>
-                <td>rol</td>
-                <td>email</td>
+                <td>Nombre</td>
+                <td>Creador</td>
+                <td>Servicios</td>
             </tr>
         `;
             const content = `
@@ -148,7 +130,7 @@ class ReportUser extends ReportController_1.ReportBaseController {
                 <h2 style="color:#212529">Libreria<h2>
                 <hr>
                 <h5 style="color:#414549">${dateNow}</h5>
-                <h6>Reporte de lista de usuarios<h6>
+                <h6>Reporte de lista de equipos<h6>
                 <span style="font-size:17px;color:#212529">Generado por: ${user.name} ${user.lastname} (${user.rol})<span>
                 <br>
                 <span style="font-size:17px;color:#212529">Fecha: ${dateNow}<span>
@@ -159,10 +141,17 @@ class ReportUser extends ReportController_1.ReportBaseController {
             </div>
 
 
-            ${_super.GenerateTablePdf.call(this, { listTr: bodyTable, tHead, title: `Lista de usuarios` })}
+            ${_super.GenerateTablePdf.call(this, { listTr: bodyTable, tHead, title: `Lista de equipos` })}
 
             ${_super.GetFooter.call(this)}
         `;
+            EquipmentModel_1.default.CreateReport({ data: {
+                    createBy: user.userId,
+                    downloader,
+                    path,
+                    fecha: dateNow,
+                    objectType: `equipo/equipment`
+                } });
             _super.GeneratePDF.call(this, { content, pathPdf: path });
             setTimeout(() => {
                 return res.redirect(`/report/${dateNow}.pdf`);
@@ -170,4 +159,4 @@ class ReportUser extends ReportController_1.ReportBaseController {
         });
     }
 }
-exports.default = ReportUser;
+exports.default = ReportEquitment;

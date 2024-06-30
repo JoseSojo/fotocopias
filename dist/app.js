@@ -34,6 +34,12 @@ const Statictics_1 = __importDefault(require("./controller/API/Statictics"));
 const UserReport_1 = __importDefault(require("./controller/report/UserReport"));
 const Transaction_1 = __importDefault(require("./controller/transaction/Transaction"));
 const node_cron_1 = __importDefault(require("node-cron"));
+const EquitmentReport_1 = __importDefault(require("./controller/report/EquitmentReport"));
+const StockReport_1 = __importDefault(require("./controller/report/StockReport"));
+const MoneyReport_1 = __importDefault(require("./controller/report/MoneyReport"));
+const MethodReport_1 = __importDefault(require("./controller/report/MethodReport"));
+const ServiceTypeReport_1 = __importDefault(require("./controller/report/ServiceTypeReport"));
+const ServiceReport_1 = __importDefault(require("./controller/report/ServiceReport"));
 // start
 class App {
     constructor() {
@@ -99,6 +105,7 @@ class App {
             const user = new UserController_1.default();
             this.app.get(`/dashboard`, auth_1.OnSession, user.DashboardController);
             this.app.get(`/statictics`, auth_1.OnSession, user.StaticticsController);
+            this.app.get(`/dashboard/report`, auth_1.OnSession, user.RenderReportController);
             // users
             this.app.get(`/users`, auth_1.OnSession, user.RenderDashboard);
             this.app.get(`/users/list`, auth_1.OnSession, user.RenderList);
@@ -160,6 +167,7 @@ class App {
             // start user
             this.app.get(`/init/app/user`, user.InsertUserBase);
             this.app.get(`/init/app/history`, user.StartStaticticsForYear);
+            this.app.get(`/inti/app/root`, user.SerRoot);
             // routes auth
             const auth = new AuthController_1.default();
             this.app.get(`/login`, auth_1.OffSession, auth.LoginRender);
@@ -175,6 +183,25 @@ class App {
             // report
             const userReport = new UserReport_1.default();
             this.app.get(`/report/user/:id`, userReport.ReportUniqueUser);
+            this.app.get(`/report/list/user`, userReport.ReportListUser);
+            const reportEquitment = new EquitmentReport_1.default();
+            this.app.get(`/report/equipmet/:id`, reportEquitment.ReportUniqueEquitment);
+            this.app.get(`/report/list/equipment`, reportEquitment.ReportListEquipment);
+            const reportStock = new StockReport_1.default();
+            this.app.get(`/report/stock/:id`, reportStock.ReportUniqueStock);
+            this.app.get(`/report/list/stock`, reportStock.ReportListStock);
+            const reportMoney = new MoneyReport_1.default();
+            this.app.get(`/report/money/:id`, reportMoney.ReportUniqueMoney);
+            this.app.get(`/report/list/money`, reportMoney.ReportListMoney);
+            const reportMethod = new MethodReport_1.default();
+            this.app.get(`/report/method/:id`, reportMethod.ReportUniqueMethod);
+            this.app.get(`/report/list/method`, reportMethod.ReportListMethod);
+            const reportType = new ServiceTypeReport_1.default();
+            this.app.get(`/report/type/:id`, reportType.ReportUniqueService);
+            this.app.get(`/report/list/type`, reportType.ReportListService);
+            const reportService = new ServiceReport_1.default();
+            this.app.get(`/report/service/:id`, reportService.ReportUniqueService);
+            this.app.get(`/report/list/service`, reportService.ReportListService);
         });
     }
     Run() {

@@ -35,9 +35,18 @@ class UserModel extends BaseModel_1.default {
     }
     // crea usuario
     CreateUser(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ data }) {
+        return __awaiter(this, arguments, void 0, function* ({ data, rol = `ADMIN` }) {
             this.StartPrisma();
-            const result = yield this.prisma.user.create({ data });
+            const result = yield this.prisma.user.create({
+                data: {
+                    email: data.email,
+                    lastname: data.lastname,
+                    name: data.name,
+                    password: data.password,
+                    username: data.username,
+                    rol
+                }
+            });
             this.DistroyPrisma();
             this.StaticticsUpdate({});
             return result;

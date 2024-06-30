@@ -122,5 +122,42 @@ class AbstractModel {
             return result;
         });
     }
+    CreateReport(_a) {
+        return __awaiter(this, arguments, void 0, function* ({ data }) {
+            this.StartPrisma();
+            const result = yield this.prisma.report.create({ data });
+            console.log(result);
+            this.DistroyPrisma();
+            return result;
+        });
+    }
+    GetReports(_a) {
+        return __awaiter(this, arguments, void 0, function* ({ pag, limit }) {
+            this.StartPrisma();
+            const result = yield this.prisma.report.findMany({
+                skip: pag * limit,
+                take: limit,
+                include: {
+                    createReference: true,
+                },
+                orderBy: {
+                    create_at: 'asc'
+                },
+                where: {
+                    delete_at: undefined
+                }
+            });
+            this.DistroyPrisma();
+            return result;
+        });
+    }
+    CountReport(_a) {
+        return __awaiter(this, arguments, void 0, function* ({ filter }) {
+            this.StartPrisma();
+            const result = yield this.prisma.report.count({ where: filter });
+            this.DistroyPrisma();
+            return result;
+        });
+    }
 }
 exports.default = AbstractModel;

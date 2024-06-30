@@ -78,7 +78,10 @@ class MethodModel extends BaseModel_1.default {
                 where: { delete_at: null },
                 skip: pag * limit,
                 take: limit,
-                include: { createReference: true },
+                include: {
+                    createReference: true,
+                    _count: true,
+                },
             });
             this.DistroyPrisma();
             return result;
@@ -136,7 +139,8 @@ class MethodModel extends BaseModel_1.default {
                 take: limit,
                 include: {
                     createReference: true,
-                    moneyReference: true
+                    moneyReference: true,
+                    _count: true,
                 }
             });
             this.DistroyPrisma();
@@ -151,7 +155,8 @@ class MethodModel extends BaseModel_1.default {
                 where: { paymentMethodId: id },
                 include: {
                     createReference: true,
-                    moneyReference: true
+                    moneyReference: true,
+                    _count: true
                 },
             });
             if (result == null)

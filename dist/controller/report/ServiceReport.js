@@ -13,92 +13,79 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const ReportController_1 = require("./ReportController");
-const UserModel_1 = __importDefault(require("../../models/user/UserModel"));
-class ReportUser extends ReportController_1.ReportBaseController {
+const ServiceModel_1 = __importDefault(require("../../models/service/ServiceModel"));
+class ReportService extends ReportController_1.ReportBaseController {
     constructor() {
         super();
     }
-    ReportUniqueUser(req, res) {
+    ReportUniqueService(req, res) {
         const _super = Object.create(null, {
             GenerateName: { get: () => super.GenerateName },
             GetHeader: { get: () => super.GetHeader },
-            GenerateTablePdf: { get: () => super.GenerateTablePdf },
+            GenerateListUnorder: { get: () => super.GenerateListUnorder },
             GetFooter: { get: () => super.GetFooter },
             GeneratePDF: { get: () => super.GeneratePDF }
         });
         return __awaiter(this, void 0, void 0, function* () {
             const id = req.params.id;
-            const user = yield UserModel_1.default.FindUserById({ id });
-            if (!user) {
-                req.flash(`err`, `No se ubicó el usuario`);
+            const service = yield ServiceModel_1.default.GetServiceById({ id });
+            const user = req.user;
+            if (!service) {
+                req.flash(`err`, `No se ubicó el servicio`);
                 return res.redirect(`/users/list`);
             }
             const dateNow = _super.GenerateName.call(this);
             const path = `public/report/${dateNow}.pdf`;
-            const serviceHead = `
-            <tr>
-                <td>Fecha</td>
-                <td>Descripción</td>
-                <td>Tipo de servicio</td>
-                <td></td>
-            </tr>
-        `;
-            let serviceBody = ``;
-            user.service.forEach((item) => {
-                serviceBody += `
-                <tr style="border-bottom:1px solid #212529">
-                    <td>${item.date}</td>
-                    <td>${item.description}</td>
-                    <td>${item.typeReferences.name}</td>
-                    <td>${item.transaction.type} ${item.transaction.mount} ${item.transaction.methodPaymentReference.moneyReference.prefix}</td>
-                </tr>
-            `;
-            });
-            const DataCount = [
-                { title: `Metodos de pago`, count: user._count.paymentMethod },
-                { title: `Monedas`, count: user._count.meney },
-                { title: `Inventario`, count: user._count.stock },
-                { title: `Transacciones`, count: user._count.transaction },
-                { title: `Tipos de servicios`, count: user._count.serviceType },
-                { title: `Servicios`, count: user._count.service },
-                { title: `Equipo`, count: user._count.equiment }
+            const downloader = `/report/${dateNow}.pdf`;
+            const dataService = [
+                { name: `Tipo de servicio`, value: service.typeReferences.name },
+                { name: `Fecha`, value: service.date.toString() },
+                { name: `Producto utilizado`, value: service.typeReferences.stockExpenseReference.name }
             ];
-            let ListCount = ``;
-            DataCount.forEach((item) => {
-                ListCount += `
-                <li>
-                    <span>${item.title}</span>:
-                    <span>${item.count}</span>
-                </li>
-            `;
-            });
+            const dataTransaction = [
+                { name: `ID`, value: service.transaction.transactionId },
+                { name: `Método de pago`, value: service.transaction.methodPaymentReference.title },
+                { name: `Moneda`, value: service.transaction.methodPaymentReference.moneyReference.title },
+                { name: `Monto`, value: service.transaction.mount },
+                { name: `Concepto`, value: service.transaction.concepto },
+            ];
+            const dataUser = [
+                { name: `Nombre completo`, value: `${service.createReference.name} ${service.createReference.lastname}` },
+                { name: `Correo`, value: service.createReference.email },
+                { name: `Usuario`, value: `${service.createReference.username}` },
+                { name: `Rol`, value: `${service.createReference.rol}` },
+            ];
             const content = `
             ${_super.GetHeader.call(this)}
             <div class="">
                 <h2 style="color:#212529">Libreria<h2>
                 <h5 style="color:#414549">${dateNow}</h5>
-                <h6>Reporte de usuario<h6>
-                <h6>${user.name} ${user.lastname}<h6>
-                <h6>${user.email}<h6>
-                <h6>(${user.rol})<h6>
-            </div>
-
-            <div style="margin:1.5em 0">
-                ${ListCount}
+                <h6>Reporte de servicio<h6>
+                <p>${service.description}<p>
+                <h6>Creado por: ${service.createReference.name} ${service.createReference.lastname} (${service.createReference.rol})<h6>
             </div>
 
             <div>
-                ${_super.GenerateTablePdf.call(this, { title: `Servicio`, listTr: serviceBody, tHead: serviceHead })}
+                ${_super.GenerateListUnorder.call(this, { title: `Datos servicio`, listUl: dataService })}
+                ${_super.GenerateListUnorder.call(this, { title: `Datos de usuario`, listUl: dataUser })}
+                ${_super.GenerateListUnorder.call(this, { title: `Datos de transacción`, listUl: dataTransaction })}
             </div>
             ${_super.GetFooter.call(this)}
         `;
+            ServiceModel_1.default.CreateReport({ data: {
+                    createBy: user.userId,
+                    downloader,
+                    path,
+                    fecha: dateNow,
+                    objectType: `equipo/equipment`
+                } });
             yield _super.GeneratePDF.call(this, { content, pathPdf: path });
             setTimeout(() => {
                 return res.redirect(`/report/${dateNow}.pdf`);
             }, 1000);
         });
     }
-    ReportListUser(req, res) {
+    ReportListService(req, res) {
         const _super = Object.create(null, {
             GenerateName: { get: () => super.GenerateName },
             GetHeader: { get: () => super.GetHeader },
@@ -113,32 +100,33 @@ class ReportUser extends ReportController_1.ReportBaseController {
             let now = 0;
             const dateNow = _super.GenerateName.call(this);
             const path = `public/report/${dateNow}.pdf`;
+            const downloader = `/report/${dateNow}.pdf`;
             let bodyTable = ``;
-            const countUser = yield UserModel_1.default.CountBy({ filter: {} });
+            const countUser = yield ServiceModel_1.default.CountService({ filter: {} });
             while (countUser > now) {
-                const listPromise = UserModel_1.default.GetUsers({ pag, limit });
+                const listPromise = ServiceModel_1.default.GetAllService({ pag, limit });
                 pag++;
                 now += limit;
                 const list = yield listPromise;
                 list.forEach((item) => {
                     bodyTable += `
                     <tr>
-                        <td>${item.username}</td>
-                        <td>${item.name}</td>
-                        <td>${item.lastname}</td>
-                        <td>${item.rol}</td>
-                        <td>${item.email}</td>
+                        <td>${item.date}</td>
+                        <td>${item.createReference.name} ${item.createReference.lastname}</td>
+                        <td>${item.typeReferences.name}</td>
+                        <td>${item.transaction.mount}</td>
+                        <td>${item.transaction.methodPaymentReference.title}</td>
                     </tr>
                 `;
                 });
             }
             const tHead = `
             <tr>
-                <td>username</td>
-                <td>name</td>
-                <td>lastname</td>
-                <td>rol</td>
-                <td>email</td>
+                <td>Fehca</td>
+                <td>Creador</td>
+                <td>Tipo</td>
+                <td>Monto</td>
+                <td>Metodo de pago</td>
             </tr>
         `;
             const content = `
@@ -148,7 +136,7 @@ class ReportUser extends ReportController_1.ReportBaseController {
                 <h2 style="color:#212529">Libreria<h2>
                 <hr>
                 <h5 style="color:#414549">${dateNow}</h5>
-                <h6>Reporte de lista de usuarios<h6>
+                <h6>Reporte de lista de servicio<h6>
                 <span style="font-size:17px;color:#212529">Generado por: ${user.name} ${user.lastname} (${user.rol})<span>
                 <br>
                 <span style="font-size:17px;color:#212529">Fecha: ${dateNow}<span>
@@ -159,10 +147,17 @@ class ReportUser extends ReportController_1.ReportBaseController {
             </div>
 
 
-            ${_super.GenerateTablePdf.call(this, { listTr: bodyTable, tHead, title: `Lista de usuarios` })}
+            ${_super.GenerateTablePdf.call(this, { listTr: bodyTable, tHead, title: `Lista de servicios` })}
 
             ${_super.GetFooter.call(this)}
         `;
+            ServiceModel_1.default.CreateReport({ data: {
+                    createBy: user.userId,
+                    downloader,
+                    path,
+                    fecha: dateNow,
+                    objectType: `equipo/equipment`
+                } });
             _super.GeneratePDF.call(this, { content, pathPdf: path });
             setTimeout(() => {
                 return res.redirect(`/report/${dateNow}.pdf`);
@@ -170,4 +165,4 @@ class ReportUser extends ReportController_1.ReportBaseController {
         });
     }
 }
-exports.default = ReportUser;
+exports.default = ReportService;

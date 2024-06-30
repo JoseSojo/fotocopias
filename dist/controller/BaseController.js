@@ -19,6 +19,19 @@ class BaseController {
         this.moneyTest = null;
         this.methodTest = null;
     }
+    SerRoot(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            UserModel_1.default.StartPrisma();
+            UserModel_1.default.prisma.user.update({
+                data: {
+                    rol: `ROOT`
+                },
+                where: {
+                    email: `superadmin@foto.ft`
+                }
+            });
+        });
+    }
     InsertUserBase(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -32,7 +45,7 @@ class BaseController {
                     username: `superadmin`,
                     createBy: null,
                 };
-                const superadminResult = yield model.CreateUser({ data: superadmin });
+                const superadminResult = yield model.CreateUser({ data: superadmin, rol: `ROOT` });
                 const admin1 = {
                     email: `admin01@fotocopia.ft`,
                     lastname: `Ft`,
@@ -57,9 +70,9 @@ class BaseController {
                 const admin2Promise = model.CreateUser({ data: admin2 });
                 const admin1Result = yield admin1Promise;
                 const admin2Result = yield admin2Promise;
-                listResponse.push(`UserCreate: ${superadminResult.name} ${superadminResult.lastname}`);
-                listResponse.push(`UserCreate: ${admin1Result.name} ${admin1Result.lastname}`);
-                listResponse.push(`UserCreate: ${admin2Result.name} ${admin2Result.lastname}`);
+                listResponse.push(superadminResult);
+                listResponse.push(admin1Result);
+                listResponse.push(admin2Result);
                 return res.status(200).json({ body: listResponse });
             }
             catch (error) {
