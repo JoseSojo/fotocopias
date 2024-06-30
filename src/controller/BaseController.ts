@@ -56,9 +56,9 @@ class BaseController {
             const admin1Result = await admin1Promise;
             const admin2Result = await admin2Promise;
 
-            listResponse.push(`UserCreate: ${superadminResult.name} ${superadminResult.lastname}`);        
-            listResponse.push(`UserCreate: ${admin1Result.name} ${admin1Result.lastname}`);        
-            listResponse.push(`UserCreate: ${admin2Result.name} ${admin2Result.lastname}`);    
+            listResponse.push(superadminResult);        
+            listResponse.push(admin1Result);        
+            listResponse.push(admin2Result);    
             
             return res.status(200).json({body:listResponse});
         } catch (error) {
