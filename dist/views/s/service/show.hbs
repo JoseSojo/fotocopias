@@ -12,7 +12,12 @@
         <div class="col-12 card">
             <div class="card-body row">
                 <div class="col-12">
-                    <p class="h4">Descripción <b>{{data.description}}</b></p>
+                    <div class="h4">
+                        <p>Descripción <b>{{data.description}}</b></p>
+                        {{#validRoot user}}
+                            <a href="/report/service/{{../data.serviceId}}" target="_blank" class="btn btn-danger bi bi-filetype-pdf"> Reporte</a>
+                        {{/validRoot}}
+                    </div>
                     <p class="">Creado el <b>{{data.date}}</b></p>
                     <p class="">Fecha sistema <b>{{#formatDate data.create_at}}{{this}}{{/formatDate}}</b></p>
                 </div>

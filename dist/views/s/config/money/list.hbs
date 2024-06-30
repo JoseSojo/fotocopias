@@ -7,7 +7,10 @@
         <span></span>
         <div class="">
             <a href="/config" class="btn btn-primary">panel</a>
+            {{#validRoot user}}
             <a href="/config/money/create" class="btn btn-primary">crear</a>
+            <a href="/report/list/money" target="_blank" class="btn btn-danger bi bi-filetype-pdf"> Reporte</a>
+            {{/validRoot}}
         </div>
     </div>
     <div class="row">
@@ -49,11 +52,11 @@
             <div class="paginating-container pagination-default col-6">
                 <ul class="pagination">
                     {{#if nowPathOne}}
-                        <li class="prev"><a href="{{previousPath}}">anterior</a></li>
+                        <li class="prev"><a href="{{previous}}">anterior</a></li>
                     {{/if}}
                         <li class=""><span class="px-5">pagina actual {{nowPath}}</span></li>
                     {{#if nowPathEnd}}
-                        <li class="next"><a href="{{nextPath}}">siguiente</a></li>
+                        <li class="next"><a href="{{next}}">siguiente</a></li>
                     {{/if}}
                 </ul>
             </div>

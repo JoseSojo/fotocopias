@@ -6,39 +6,38 @@
     <div class="row d-flex justify-content-between mb-2">
         <span></span>
         <div class="">
-            {{#validRoot user}}
-                <a href="/transaction/create" class="btn btn-primary">crear</a>
-            {{/validRoot}}
+            <a href="/dashboard" class="btn btn-primary">panel</a>
+            {{!-- {{#validRoot user}}
+                <a href="/report/list/user" target="_blank" class="btn btn-danger">
+                    <div class="bi bi-filetype-pdf"></div>
+                </a>
+            {{/validRoot}} --}}
         </div>
     </div>
     <div class="row">
         {{#if list}}
             <div class="table-responsive">
-                <table class="table table-bordered table-hover table-striped table-sm mb-4">
+                <table class="table table-bordered table-striped mb-4">
                     <thead>
                         <tr>
-                            <th>Concepto</th>
-                            <th>Monto</th>
-                            <th>Tipo</th>
-                            {{#validRoot user}}
-                                <th class="text-center">acciones</th>
-                            {{/validRoot}}
-
+                            <th>Fecha</th>
+                            <th>Objecto reporte</th>
+                            <th>Creador</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         {{#each list}}
                             <tr>
-                                <td>{{this.concepto}}</td>
-                                <td>{{this.mount}}</td>
-                                <td>{{this.type}}</td>
-                                {{#validRoot ../user}}
+                                <th class="">{{this.fecha}}</th>
+                                <th class="">{{this.objectType}}</th>
+                                <th class="">{{this.createReference.name}} {{this.createReference.lastname}}</th>
                                 <td>
-                                    <a href="/transaction/{{this.transactionId}}/show" class="btn py-0 btn-primary">
-                                        <i class="bi bi-eye-fill lead"></i>
+                                    <a href="{{this.downloader}}" target="_blank" class="btn btn-danger">
+                                        <i class="bi bi-filetype-pdf"></i>
+                                        Descargar reporte
                                     </a>
                                 </td>
-                                {{/validRoot}}
                             </tr>
                         {{/each}}
                     </tbody>
@@ -60,7 +59,7 @@
                 </ul>
             </div>
         {{else}}
-            <p class="text-muted lead">No hay usuario</p>
+            <p class="text-muted lead">No hay reportes</p>
         {{/if}}
     </div>
 </div>

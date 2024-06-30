@@ -7,7 +7,7 @@
                 <a href="#dashboard" data-active="true" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle collapsed">
                     <p class="">
                         <i class="lead bi bi-bar-chart-fill"></i>
-                        <strong>Panel</strong>
+                        <strong>Admin</strong>
                     </p>
                     <div>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
@@ -17,12 +17,18 @@
                     <li class="">
                         <a href="/dashboard"> Resumen </a>
                     </li>
+                    {{#validRoot user}}
                     <li>
                         <a href="/statictics"> Estadísticas </a>
                     </li>
+                    <li>
+                        <a href="/dashboard/report"> Reporte </a>
+                    </li>
+                    {{/validRoot}}
                 </ul>
             </li>   
 
+            {{#validRoot user}}
             <li class="menu">
                 <a href="#user" data-active="true" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
                     <p class="">
@@ -42,6 +48,7 @@
                     </li>
                 </ul>
             </li>   
+            {{/validRoot}}
 
             <li class="menu">
                 <a href="#stock" data-active="true" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
@@ -67,7 +74,7 @@
                 <a href="#servicios" data-active="true" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
                     <p class="">
                         <i class="lead bi bi-list-task"></i>
-                        <strong>Tipos servicios</strong>
+                        <strong>Servicios</strong>
                     </p>
                     <div>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
@@ -83,6 +90,7 @@
                 </ul>
             </li> 
 
+            {{#validRoot user}}
             <li class="menu">
                 <a href="/transaction/list" data-active="true" class="dropdown-toggle">
                     <p class="">
@@ -91,16 +99,18 @@
                     </p>
                 </a>
             </li>  
+            {{/validRoot}}
 
-            <li class="menu">
-                <a href="/config" data-active="true" class="dropdown-toggle">
-                    <p class="">
-                        <i class="lead bi bi-wrench-adjustable-circle-fill"></i>
-                        <strong>Configuraciones</strong>
-                    </p>
-                </a>
-            </li>   
-
+            {{#validRoot user}}
+                <li class="menu">
+                    <a href="/config" data-active="true" class="dropdown-toggle">
+                        <p class="">
+                            <i class="lead bi bi-wrench-adjustable-circle-fill"></i>
+                            <strong>Configuraciones</strong>
+                        </p>
+                    </a>
+                </li>
+            {{/validRoot}}
         </ul>     
     </nav>
 </div>

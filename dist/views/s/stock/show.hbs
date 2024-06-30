@@ -4,7 +4,12 @@
     <div class="row">
         <div class="card col-lg-6 col-md-5 col-sm-12 layout-top-spacing">
             <div class="card-body">
-                <h4>{{data.name}}</h4>
+                <h4 class="d-flex justify-content-between">
+                    {{data.name}}
+                    {{#validRoot user}}
+                        <a href="/report/stock/{{../data.stockId}}" target="_blank" class="btn btn-danger bi bi-filetype-pdf"> Reporte</a> 
+                    {{/validRoot}}   
+                </h4>
                 <p class="text-muted">cantidad: <b>{{data.quantity}}</b></p>
                 <p class="text-muted">descripción: <b>{{data.description}}</b></p>
 

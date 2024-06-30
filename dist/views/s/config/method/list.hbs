@@ -6,8 +6,11 @@
     <div class="row d-flex justify-content-between mb-2">
         <span></span>
         <div class="">
+            {{#validRoot user}}
             <a href="/config" class="btn btn-primary">panel</a>
             <a href="/config/method/create" class="btn btn-primary">crear</a>
+            <a href="/report/list/method" target="_blank" class="btn btn-danger bi bi-filetype-pdf"> Reporte</a>
+            {{/validRoot}}
         </div>
     </div>
     <div class="row">
@@ -19,7 +22,10 @@
                             <th>Titulo</th>
                             <th>Moneda</th>
                             <th>Creado el</th>
+                            {{#validRoot user}}
                             <th class="text-center">acciones</th>
+                            {{/validRoot}}
+
                         </tr>
                     </thead>
                     <tbody>
@@ -32,11 +38,14 @@
                                         {{this}}
                                     {{/formatDate}}
                                 </td>
+                                {{#validRoot ../user}}
                                 <td>
-                                    <a href="/config/method/{{this.paymentMethodId}}/show" class="btn py-0 btn-primary">
+                                    <a href="/config/method/{{../this.paymentMethodId}}/show" class="btn py-0 btn-primary">
                                         <i class="bi bi-eye-fill lead"></i>
                                     </a>
                                 </td>
+                                {{/validRoot}}
+
                             </tr>
                         {{/each}}
                     </tbody>
@@ -49,11 +58,11 @@
             <div class="paginating-container pagination-default col-6">
                 <ul class="pagination">
                     {{#if nowPathOne}}
-                        <li class="prev"><a href="{{previousPath}}">anterior</a></li>
+                        <li class="prev"><a href="{{previous}}">anterior</a></li>
                     {{/if}}
                         <li class=""><span class="px-5">pagina actual {{nowPath}}</span></li>
                     {{#if nowPathEnd}}
-                        <li class="next"><a href="{{nextPath}}">siguiente</a></li>
+                        <li class="next"><a href="{{next}}">siguiente</a></li>
                     {{/if}}
                 </ul>
             </div>

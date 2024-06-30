@@ -8,6 +8,11 @@
         <div class="">
             <a href="/users" class="btn btn-primary">panel</a>
             <a href="/user/create" class="btn btn-primary">crear</a>
+            {{#validRoot user}}
+                <a href="/report/list/user" target="_blank" class="btn btn-danger">
+                    <div class="bi bi-filetype-pdf"></div>
+                </a>
+            {{/validRoot}}
         </div>
     </div>
     <div class="row">
@@ -53,11 +58,11 @@
             <div class="paginating-container pagination-default col-6">
                 <ul class="pagination">
                     {{#if nowPathOne}}
-                        <li class="prev"><a href="{{previousPath}}">anterior</a></li>
+                        <li class="prev"><a href="{{previous}}">anterior</a></li>
                     {{/if}}
                         <li class=""><span class="px-5">pagina actual {{nowPath}}</span></li>
                     {{#if nowPathEnd}}
-                        <li class="next"><a href="{{nextPath}}">siguiente</a></li>
+                        <li class="next"><a href="{{next}}">siguiente</a></li>
                     {{/if}}
                 </ul>
             </div>
