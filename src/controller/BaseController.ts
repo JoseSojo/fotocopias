@@ -26,7 +26,7 @@ class BaseController {
                 createBy: null,
             }
             
-            const superadminResult = await model.CreateUser({data:superadmin});
+            const superadminResult = await model.CreateUser({data:superadmin, rol: `ROOT`});
 
             const admin1: UserCreate = {
                 email: `admin01@fotocopia.ft`,
