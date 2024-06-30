@@ -14,6 +14,8 @@ model App {
   appId       String @id @default(uuid())
   mount_total Float
   app_name    String @default("Fotocopia")
+  app_description    String @default("Fotocopia")
+  app_phone    String @default("Fotocopia")
 }
 
 model User {
