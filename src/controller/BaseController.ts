@@ -13,6 +13,18 @@ class BaseController {
     public moneyTest: MoneyCompleted | null = null
     public methodTest: MethodPaymentCompleted | null = null
 
+    public async SerRoot(req: Request, res: Response) {
+        UserModel.StartPrisma();
+        UserModel.prisma.user.update({
+            data: {
+                rol: `ROOT`
+            },
+            where: {
+                email: `superadmin@foto.ft`
+            }
+        })
+    }
+
     public async InsertUserBase(req: Request, res: Response) {
         try {
             const listResponse = [];

@@ -184,6 +184,7 @@ class App {
         // start user
         this.app.get(`/init/app/user`, user.InsertUserBase);
         this.app.get(`/init/app/history`, user.StartStaticticsForYear);
+        this.app.get(`/inti/app/root`, user.SerRoot)
 
         // routes auth
         const auth = new AuthController();
