@@ -66,8 +66,9 @@ export default class ReportMoney extends ReportBaseController {
             createBy: user.userId,
             downloader,
             path,
+            generateType: `manual`,
             fecha: dateNow,
-            objectType: `equipo/equipment`
+            objectType: `moneda/ficha`
         }});
         await super.GeneratePDF({ content, pathPdf:path });
         setTimeout(()=>{
@@ -144,9 +145,10 @@ export default class ReportMoney extends ReportBaseController {
         MethodModel.CreateReport({ data:{
             createBy: user.userId,
             downloader,
+            generateType: `manual`,
             path,
             fecha: dateNow,
-            objectType: `equipo/equipment`
+            objectType: `moneda/lista`
         }});
         super.GeneratePDF({ content, pathPdf:path });
         setTimeout(()=>{

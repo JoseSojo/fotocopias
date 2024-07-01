@@ -213,12 +213,13 @@ model StaticticsForYear {
 model Report {
   reportId                String      @id @default(uuid())
 
+  generateType            String      @default("manual")
   objectType              String
   fecha                   String
   path                    String
   downloader              String
 
-  createBy                String
+  createBy                String?
   createReference         User?        @relation(fields: [createBy], references: [userId])
 
   create_at               DateTime    @default(now())

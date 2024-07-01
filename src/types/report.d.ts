@@ -4,8 +4,9 @@ export interface ReportCreate {
     fecha: string,
     path: string,
     downloader: string,
-    createBy: string
-    objectType: string
+    createBy?: string,
+    objectType: string,
+    generateType: string
 }
 
 export interface ReportCompleted extends ReportCreate {

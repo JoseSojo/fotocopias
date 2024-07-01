@@ -115,15 +115,16 @@ export class ReportBaseController {
 
     public async GeneratePDF({ content, pathPdf }: { content:any, pathPdf:string }) {
 
+        console.log(`Generando reporte`);
         return pdf
             .create(
-                content,{
-                                        
-            })
+                content,{}
+            )
             .toFile(
                 pathPdf,
                 (err, res) => {
                     if(err) return false;
+                    console.log(`reporte generado`, pathPdf);
                     return res;
                 }
             );

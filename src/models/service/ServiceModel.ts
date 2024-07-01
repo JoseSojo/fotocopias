@@ -8,7 +8,7 @@ class ServiceModel extends AbstractModel {
         super();
     }
 
-    public async GetAllServicesFilter({filter}:{filter:{date:string}}) {
+    public async GetAllServicesFilter({filter, pag=0, limit=100}:{filter:{date:string}, pag:number,limit:number}) {
         this.StartPrisma();
         const result = await this.prisma.service.findMany({ 
             where:{
@@ -29,7 +29,9 @@ class ServiceModel extends AbstractModel {
                     }
                 },
                 typeReferences: true
-            }
+            },
+            skip: pag*limit,
+            take: limit,
         });
         this.DistroyPrisma();
         return result;
@@ -83,7 +85,9 @@ class ServiceModel extends AbstractModel {
 
     public async CountService({filter}: {filter:any}) {
         this.StartPrisma();
-        const result = await this.prisma.service.count({ where:filter });
+        const result = await this.prisma.service.count({ where:{
+            date: `2024-07-01`
+        } });
         this.DistroyPrisma();
         return result;
     }

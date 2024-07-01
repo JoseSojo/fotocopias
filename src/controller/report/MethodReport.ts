@@ -62,6 +62,14 @@ export default class ReportMethod extends ReportBaseController {
             ${super.GetFooter()}
         `;
 
+        MethodModel.CreateReport({ data:{
+            createBy: user.userId,
+            generateType: `manual`,
+            downloader,
+            path,
+            fecha: dateNow,
+            objectType: `metodo/ficha`
+        }});
         await super.GeneratePDF({ content, pathPdf:path });
         setTimeout(()=>{
             return res.redirect(`/report/${dateNow}.pdf`);        
@@ -135,10 +143,11 @@ export default class ReportMethod extends ReportBaseController {
 
         MethodModel.CreateReport({ data:{
             createBy: user.userId,
+            generateType: `manual`,
             downloader,
             path,
             fecha: dateNow,
-            objectType: `equipo/equipment`
+            objectType: `metodo/lsita`
         }});
         super.GeneratePDF({ content, pathPdf:path });
         setTimeout(()=>{

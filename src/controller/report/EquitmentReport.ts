@@ -64,9 +64,10 @@ export default class ReportEquitment extends ReportBaseController {
         EquitmentModel.CreateReport({ data:{
             createBy: user.userId,
             downloader,
+            generateType: `manual`,
             path,
             fecha: dateNow,
-            objectType: `equipo/equipment`,
+            objectType: `equipo/ficha`,
         }});
         await super.GeneratePDF({ content, pathPdf:path });
         setTimeout(()=>{
@@ -140,8 +141,9 @@ export default class ReportEquitment extends ReportBaseController {
             createBy: user.userId,
             downloader,
             path,
+            generateType: `manual`,
             fecha: dateNow,
-            objectType: `equipo/equipment`
+            objectType: `equipo/lista`
         }});
         super.GeneratePDF({ content, pathPdf:path });
         setTimeout(()=>{

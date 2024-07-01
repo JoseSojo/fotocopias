@@ -64,7 +64,8 @@ export default class ReportTypeService extends ReportBaseController {
             downloader,
             path,
             fecha: dateNow,
-            objectType: `equipo/equipment`
+            generateType: `manual`,
+            objectType: `tipo/ficha`
         }});
         await super.GeneratePDF({ content, pathPdf:path });
         setTimeout(()=>{
@@ -138,10 +139,11 @@ export default class ReportTypeService extends ReportBaseController {
 
         ServiceModel.CreateReport({ data:{
             createBy: user.userId,
+            generateType: `manual`,
             downloader,
             path,
             fecha: dateNow,
-            objectType: `equipo/equipment`
+            objectType: `tipo/lista`
         }});
         super.GeneratePDF({ content, pathPdf:path });
         setTimeout(()=>{

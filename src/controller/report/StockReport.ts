@@ -63,9 +63,10 @@ export default class ReportStock extends ReportBaseController {
         StockModel.CreateReport({ data:{
             createBy: user.userId,
             downloader,
+            generateType: `manual`,
             path,
             fecha: dateNow,
-            objectType: `equipo/equipment`
+            objectType: `stock/ficha`
         }});
         await super.GeneratePDF({ content, pathPdf:path });
         setTimeout(()=>{
@@ -140,9 +141,10 @@ export default class ReportStock extends ReportBaseController {
         StockModel.CreateReport({ data:{
             createBy: user.userId,
             downloader,
+            generateType: `manual`,
             path,
             fecha: dateNow,
-            objectType: `equipo/equipment`
+            objectType: `stock/lista`
         }});
         super.GeneratePDF({ content, pathPdf:path });
         setTimeout(()=>{

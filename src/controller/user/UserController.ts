@@ -36,9 +36,10 @@ class UserController extends BaseController {
         const transactionsCountPromise = TransactionModel.CountAllTransactions({});
         const years = MethodModel.GetYears({});
         const month = date.getMonth()+1;
-        const toDay = `${date.getFullYear()}-${month<10 ? `0${month}`:`${month}` }-${date.getDate()}`;
+        const day = date.getDate();
+        const toDay = `${date.getFullYear()}-${month<10 ? `0${month}`:`${month}` }-${day<10 ? `0${day}`:`${day}` }`;
 
-        const serviceToDay = ServiceModel.GetAllServicesFilter({ filter:{date:toDay} });
+        const serviceToDay = ServiceModel.GetAllServicesFilter({ filter:{date:toDay}, pag:0,limit:100 });
         const countService = ServiceModel.CountService({ filter:{date:toDay} })
 
         const transsactions = await transactionsCountPromise;

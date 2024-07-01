@@ -28,6 +28,7 @@ import ReportMoney from './controller/report/MoneyReport';
 import ReportMethod from './controller/report/MethodReport';
 import ReportTypeService from './controller/report/ServiceTypeReport';
 import ReportService from './controller/report/ServiceReport';
+import AutomaticReport from './controller/report/automatic/AutomaticReport';
 
 // start
 class App {
@@ -39,13 +40,15 @@ class App {
 
     public CornNode () {
         const date = new Date();
+        const autimaticReport = new AutomaticReport();
 
-        // cron.schedule("* * * * * *", function () {
-        //     console.log(date.getHours(), date.getMinutes()+1, date.getSeconds());             
-        // });
+        cron.schedule("*/3 * * * * *", function () {
+            console.log(date.getHours(), date.getMinutes()+1, date.getSeconds(), date.getMilliseconds());    
+        });
 
-        cron.schedule("1 1 22 * * *", function () {
-            console.log("a las 7:19");  
+        cron.schedule("0 0 22 * * *", function () {
+            console.log(date.getHours(), date.getMinutes()+1, date.getSeconds());  
+            autimaticReport.ReportForDay();      
         });
     }
 
